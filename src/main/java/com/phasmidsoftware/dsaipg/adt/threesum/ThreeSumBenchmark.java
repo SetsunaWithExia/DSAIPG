@@ -102,8 +102,13 @@ public class ThreeSumBenchmark {
      */
     private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
         if (description.equals("ThreeSumCubic") && n > 4000) return;
-        // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+        double st = System.currentTimeMillis();
+        for(int i = 1; i <= runs; i++){
+            function.accept(supplier.get());
+        }
+        double ed = System.currentTimeMillis();
+        timeLoggers[1].log(description,ed-st,n);
+        timeLoggers[0].log(description,ed-st,n);
     }
 
     /**
