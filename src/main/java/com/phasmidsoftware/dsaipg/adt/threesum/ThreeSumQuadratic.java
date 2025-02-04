@@ -49,8 +49,36 @@ public class ThreeSumQuadratic implements ThreeSum {
      */
      List<Triple> getTriples(int j) {
          List<Triple> triples = new ArrayList<>();
-        // TO BE IMPLEMENTED  : for each candidate, test if a[i] + a[j] + a[k] = 0.
-throw new RuntimeException("implementation missing");
+         int i = j - 1, k = j + 1;
+         int temp = - a[j];
+         while(i >= 0 && k < length){
+
+             if(a[i] + a[k] == temp){
+                 triples.add(new Triple(a[i],a[j],a[k]));
+                 i--;k++;
+             }
+
+             int step;
+             if(i>=0 && k<length && a[i] + a[k] > temp) {
+                 for (step = (int) (Math.log10(length) / 0.3) + 1; step >= 0; step--){//Doubling find a smaller number on the left side
+                     if (i - (1 << step) < 0) continue;
+                     if (a[i - (1 << step)] + a[k] >= temp) {
+                         i = i - (1 << step);
+                     }
+                 }
+             }
+             if(i>=0 && k<length && a[i] + a[k] <temp) {
+                 for (step = (int) (Math.log10(length) / 0.3) + 1; step >= 0; step--){//Doubling find a larger number on the right side
+                     if (k + (1 << step) >= length) continue;
+                     if (a[k + (1 << step)] + a[i] <= temp) {
+                         k = k + (1 << step);
+                     }
+                 }
+             }
+             if(i>=0 && k<length && a[i] + a[k] >temp)i--;
+             if(i>=0 && k<length && a[i] + a[k] <temp)k++;
+         }
+        return triples;
     }
 
     private final int[] a;
