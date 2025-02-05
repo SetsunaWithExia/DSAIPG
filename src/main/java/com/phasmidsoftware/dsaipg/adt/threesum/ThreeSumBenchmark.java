@@ -8,6 +8,8 @@ import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
 import com.phasmidsoftware.dsaipg.util.TimeLogger;
 import com.phasmidsoftware.dsaipg.util.Utilities;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -78,12 +80,19 @@ public class ThreeSumBenchmark {
      * @param args command-line arguments (not used in this application).
      */
     public static void main(String[] args) {
+        System.out.println("First BenchMark, n=250 ");
         new ThreeSumBenchmark(100, 250, 250).runBenchmarks();
+        System.out.println("Second BenchMark, n=500 ");
         new ThreeSumBenchmark(50, 500, 500).runBenchmarks();
+        System.out.println("Third BenchMark, n=1000 ");
         new ThreeSumBenchmark(20, 1000, 1000).runBenchmarks();
+        System.out.println("Fourth BenchMark, n=2000 ");
         new ThreeSumBenchmark(10, 2000, 2000).runBenchmarks();
+        System.out.println("Fifth BenchMark, n=4000 ");
         new ThreeSumBenchmark(5, 4000, 4000).runBenchmarks();
+        System.out.println("Sixth BenchMark, n=8000 ");
         new ThreeSumBenchmark(3, 8000, 8000).runBenchmarks();
+        System.out.println("Seventh BenchMark, n=16000 ");
         new ThreeSumBenchmark(2, 16000, 16000).runBenchmarks();
     }
 
@@ -104,11 +113,13 @@ public class ThreeSumBenchmark {
         if (description.equals("ThreeSumCubic") && n > 4000) return;
         double st = System.currentTimeMillis();
         for(int i = 1; i <= runs; i++){
+
             function.accept(supplier.get());
         }
         double ed = System.currentTimeMillis();
-        timeLoggers[1].log(description,ed-st,n);
-        timeLoggers[0].log(description,ed-st,n);
+
+        timeLoggers[1].log(description,(ed-st)/runs,n);
+        timeLoggers[0].log(description,(ed-st)/runs,n);
     }
 
     /**

@@ -77,6 +77,7 @@ public class ThreeSumQuadratic implements ThreeSum {
              }
              if(i>=0 && k<length && a[i] + a[k] >temp)i--;
              if(i>=0 && k<length && a[i] + a[k] <temp)k++;
+
          }
         return triples;
     }
