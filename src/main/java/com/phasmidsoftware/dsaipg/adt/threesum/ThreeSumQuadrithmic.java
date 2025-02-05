@@ -64,8 +64,8 @@ class ThreeSumQuadrithmic implements ThreeSum {
         int l=j+1,r=length-1,mid;
 
         while(l<r){
-           // System.out.println("l="+l+" r="+r);
-            mid = (l+r)>>1;
+
+            mid = (l+r+1)>>1;
             if(a[mid]>-a[i]-a[j]){
                 r = mid - 1;
             }else{
