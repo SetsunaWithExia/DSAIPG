@@ -4,15 +4,20 @@
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
 import com.phasmidsoftware.dsaipg.sort.Helper;
+import com.phasmidsoftware.dsaipg.sort.HelperFactory;
 import com.phasmidsoftware.dsaipg.sort.Sort;
 import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
 import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.Config_Benchmark;
 
+import java.io.File;
+
 import java.io.IOException;
-import java.util.Comparator;
+import java.io.PrintWriter;
+import java.util.*;
 
 import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfigFixes;
 
 /**
  * A class for performing insertion sort using a comparator, extending functionality from SortWithHelper.
@@ -64,9 +69,14 @@ public class InsertionSortComparator<X> extends SortWithHelper<X> {
      */
     public void sort(X[] xs, int from, int to) {
         final Helper<X> helper = getHelper();
+        for(int i = from; i < to - 1; i++){
+            for(int j = i+1; j> from; j--){
 
-        // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                if(helper.compare(xs[j],xs[j-1])<0){
+                    helper.swapStable(xs,j);
+                }else break;
+            }
+        }
     }
 
     public static final String DESCRIPTION = "Insertion sort";
@@ -112,6 +122,75 @@ throw new RuntimeException("implementation missing");
             sorter.sort(ts, true);
             return helper.getFixes();
         }
+    }
+    public static void main(String[] args) throws IOException {
+        File file = new File("D:\\NortheasternUniversity\\INFO 6205 Program Structure and Algorithms\\Assignment3\\Benchmark3.csv");
+        PrintWriter writer = new PrintWriter(file);
+        Integer list[] = new Integer[496000];
+        int maxm =(int) 1E7+9;
+        Random random = new Random();
+
+        writer.println("n,random,ordered,partially-ordered,reverse-ordered");
+        int n[]= {20,40,80,160,320,640,1280,2560,5120,12400,24800,49600};
+        // random
+
+        for(int maxn:n){
+            System.out.println(maxn);
+            int runs=10;
+            long t[]= {0,0,0,0};
+            Helper<Integer> helper = HelperFactory.createGeneric("Benchmark",Integer::compareTo,maxn,10,setupConfigFixes());
+            InsertionSortComparator<Integer> sorter = new InsertionSortComparator<>(helper);
+            while(runs--!=0){
+                for(int i = 0; i < maxn; i++) list[i] = random.nextInt(maxm);
+                double st = System.nanoTime();
+                sorter.sort(list,0,maxn);
+                double ed = System.nanoTime();
+                t[0]+=(long)ed-st;
+                // ordered
+                st = System.nanoTime();
+                sorter.sort(list,0,maxn);
+                ed = System.nanoTime();
+                t[1]+=(long)ed-st;
+
+                // partially-ordered
+                for(int i = 0; i < maxn; i++) list[i] = random.nextInt(maxm);
+                for(int i=0;i<maxn*Math.log10(maxn)/0.301/2;i++){
+                    int l = random.nextInt(maxn);
+                    int r = random.nextInt(maxn);
+                    if(l>r){
+                        l+=r; r=l-r; l=l-r; //swap l r
+                    }
+                    if(list[l]>list[r]){
+                        list[l]+=list[r]; list[r]=list[l]-list[r];list[l]=list[l]-list[r]; // swap list[l] list[r]
+                    }
+                }
+                st = System.nanoTime();
+                sorter.sort(list,0,maxn);
+                ed = System.nanoTime();
+                t[2]+=(long)ed-st;
+
+                // reverse-ordered
+                for(int i=0;i<maxn/2;i++) {
+                    int r = maxn-i-1;
+                    list[i]+=list[r];
+                    list[r]=list[i]-list[r];
+                    list[i]=list[i]-list[r];
+                }
+                st = System.nanoTime();
+                sorter.sort(list,0,maxn);
+                ed = System.nanoTime();
+                t[3]+=(long)ed-st;
+            }
+            writer.printf("%d",maxn);
+            for(long k:t){
+                writer.printf(",%d",k/10);
+            }
+            writer.println();
+        }
+        writer.close();
+
+
+
     }
 
 }
