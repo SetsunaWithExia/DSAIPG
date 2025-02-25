@@ -4,9 +4,17 @@
 
 package com.phasmidsoftware.dsaipg.adt.pq;
 
+import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+
+import static java.lang.Math.log;
+import static java.lang.Math.min;
 
 /**
  * Priority Queue Data Structure which uses a binary heap.
@@ -276,29 +284,197 @@ public class PriorityQueue<K> implements Iterable<K> {
     private int last; // number of elements in the binary heap
     private final boolean floyd; //Determine whether floyd's snake method is on or off inside the take method
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws PQException, FileNotFoundException {
         doMain();
     }
 
     /**
      * XXX Huh?
      */
-    static void doMain() {
-        String[] s1 = new String[5]; //Created a string type array with size 5
-        s1[0] = "A";
-        s1[1] = "B";
-        s1[2] = "C";
-        s1[3] = "D";
-        s1[4] = "E";
-        boolean max = true;
-        boolean floyd = true;
-        Iterable<String> PQ_string_floyd = new PriorityQueue<>(max, s1, 1, 5, Comparator.comparing(String::toString), floyd);
-        Iterable<String> PQ_string_nofloyd = new PriorityQueue<>(max, s1, 1, 5, Comparator.comparing(String::toString), false);
-        Integer[] s2 = new Integer[5]; //created an Integer type array with size 5
-        for (int i = 0; i < 5; i++) {
-            s2[i] = i;
+    static void doMain() throws PQException, FileNotFoundException {
+
+        ArrayList<Integer> overFill = new ArrayList<>();
+        Random random = new Random();
+
+        File file = new File("D:\\NortheasternUniversity\\INFO 6205 Program Structure and Algorithms\\Assignment4\\BenchMark.csv");
+        PrintWriter writer = new PrintWriter(file);
+
+        PriorityQueue<Integer> pq= new PriorityQueue<>(4096,Comparator.comparing(Integer::intValue));
+        int input_Array[] = {15,31,62,125,250,500,1000,2000,4000,8000,16000,32000,64000,128000,256000,512000,1024000};
+/*PQ with Floyd*/
+        Benchmark_Timer<Integer> benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ floyd",(maxInput)->{
+            overFill.clear();while(!pq.isEmpty()) {
+            try {
+                pq.take();
+            } catch (PQException e) {
+                throw new RuntimeException(e);
+            }
         }
-        Iterable<Integer> PQ_int_floyd = new PriorityQueue<>(max, s2, 1, 5, Comparator.comparing(Integer::intValue), floyd);
-        Iterable<Integer> PQ_int_nofloyd = new PriorityQueue<>(max, s2, 1, 5, Comparator.comparing(Integer::intValue), false);
+            return maxInput;
+        },(maxInput)->{
+            for(int i = 1; i <=maxInput ; i++){
+                if(pq.size() == 4095) {
+                    try {
+                        overFill.add(pq.take());
+                    } catch (PQException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                pq.give(random.nextInt());
+            }
+            for(int i = 1; i <= 4000; i++){
+                try {
+                    if(!pq.isEmpty())
+                      pq.take();
+                } catch (PQException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        },null);
+
+        ArrayList<Double> pqFloyd = new ArrayList<>();
+        ArrayList<Double> pqn = new ArrayList<>();
+        System.out.println("===============================");
+        System.out.println("Running PQ with floyd");
+        for(int i = 0; i < input_Array.length; i++){
+            double total_time = benchMarkTimer.run(input_Array[i],20);
+            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            pqn.add(log(input_Array[i])/log(2));
+            pqFloyd.add(log((int)(total_time*1e6))/log(2));
+            overFill.sort(Comparator.comparing(Integer::intValue));
+            System.out.println("Total Overfill size = "+overFill.size());
+            if(!overFill.isEmpty())
+                System.out.printf("The element with the highest priority in PQ is %d\n",overFill.get(overFill.size()-1));
+            else
+                System.out.printf("No element overfill in PQ floyd\n");
+            System.out.println();
+        }
+/*PQ without Floyd*/
+        PriorityQueue<Integer> pq_no_floyd = new PriorityQueue<>(4096,true,Comparator.comparing(Integer::intValue),false);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ without floyd",(maxInput)->{
+            overFill.clear();while(!pq_no_floyd.isEmpty()) {
+                try {
+                    pq_no_floyd.take();
+                } catch (PQException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return maxInput;
+        },(maxInput)->{
+            for(int i = 1; i <=maxInput ; i++){
+                if(pq_no_floyd.size() == 4095) {
+                    try {
+                        overFill.add(pq_no_floyd.take());
+                    } catch (PQException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                pq_no_floyd.give(random.nextInt());
+            }
+            for(int i = 1; i <= 4000; i++){
+                try {
+                    if(!pq_no_floyd.isEmpty())
+                        pq_no_floyd.take();
+                } catch (PQException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        },null);
+        System.out.println("===============================");
+        System.out.println("Running PQ without floyd");
+        ArrayList<Double> pqNoFloydFloyd = new ArrayList<>();
+
+        for(int i = 0; i < input_Array.length; i++){
+            double total_time = benchMarkTimer.run(input_Array[i],20);
+            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            pqNoFloydFloyd.add(log((int)(total_time*1e6))/log(2));
+            overFill.sort(Comparator.comparing(Integer::intValue));
+            System.out.println("Total Overfill size = "+overFill.size());
+            if(!overFill.isEmpty())
+                System.out.printf("The element with the highest priority in PQ is %d\n",overFill.get(overFill.size()-1));
+            else
+                System.out.print("No element overfill in PQ without floyd\n");
+            System.out.println();
+        }
+
+/*4 Array Heap With Floyd*/
+        ArrayList<Double> pqFourArrayHeapwithFloyd = new ArrayList<>();
+        FourArrayHeap<Integer> fourArrayHeapwithFloyd = new FourArrayHeap<>(4095,Comparator.comparing(Integer::intValue),true,true);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap with floyd",(maxInput)->{
+            overFill.clear();while(!fourArrayHeapwithFloyd.isEmpty()) {
+                fourArrayHeapwithFloyd.take();
+            }
+            return maxInput;
+        },(maxInput)->{
+            for(int i = 1; i <=maxInput ; i++){
+                if(fourArrayHeapwithFloyd.size() == 4095) {
+                    overFill.add(fourArrayHeapwithFloyd.take());
+                }
+                fourArrayHeapwithFloyd.give(random.nextInt());
+            }
+            for(int i = 1; i <= 4000; i++){
+                if(!fourArrayHeapwithFloyd.isEmpty())
+                    fourArrayHeapwithFloyd.take();
+            }
+        },null);
+        System.out.println("===============================");
+        System.out.println("Running 4 Array Heap with floyd");
+        for(int i = 0; i < input_Array.length; i++){
+            double total_time = benchMarkTimer.run(input_Array[i],20);
+            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            pqFourArrayHeapwithFloyd.add(log((int)(total_time*1e6))/log(2));
+            overFill.sort(Comparator.comparing(Integer::intValue));
+            System.out.println("Total Overfill size = "+overFill.size());
+            if(!overFill.isEmpty())
+                System.out.printf("The element overfilled with the highest priority in 4 Array Heap is %d\n",overFill.get(overFill.size()-1));
+            else
+                System.out.print("No element overfill in 4 Array Heap with floyd\n");
+            System.out.println();
+        }
+/*4 Array Heap Without Floyd*/
+        ArrayList<Double> pqFourArrayHeapwithoutFloyd = new ArrayList<>();
+        FourArrayHeap<Integer> fourArrayHeapwithoutFloyd = new FourArrayHeap<>(4095,Comparator.comparing(Integer::intValue),false,true);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap without floyd",(maxInput)->{
+            overFill.clear();while(!fourArrayHeapwithoutFloyd.isEmpty()) {
+                fourArrayHeapwithoutFloyd.take();
+            }
+            return maxInput;
+        },(maxInput)->{
+            for(int i = 1; i <=maxInput ; i++){
+                if(fourArrayHeapwithoutFloyd.size() == 4095) {
+                    overFill.add(fourArrayHeapwithoutFloyd.take());
+                }
+                fourArrayHeapwithoutFloyd.give(random.nextInt());
+            }
+            for(int i = 1; i <= 4000; i++){
+                if(!fourArrayHeapwithoutFloyd.isEmpty())
+                    fourArrayHeapwithoutFloyd.take();
+            }
+        },null);
+        System.out.println("===============================");
+        System.out.println("Running 4 Array Heap without floyd");
+        for(int i = 0; i < input_Array.length; i++){
+            double total_time = benchMarkTimer.run(input_Array[i],20);
+            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            pqFourArrayHeapwithoutFloyd.add(log((int)(total_time*1e6))/log(2));
+            overFill.sort(Comparator.comparing(Integer::intValue));
+            System.out.println("Total Overfill size = "+overFill.size());
+            if(!overFill.isEmpty())
+                System.out.printf("The element overfilled with the highest priority in 4 Array Heap is %d\n",overFill.get(overFill.size()-1));
+            else
+                System.out.print("No element overfill in 4 Array Heap without floyd\n");
+            System.out.println();
+        }
+
+/*Print result to CSV*/
+        writer.println("lg(n),"+"PQ with Floyd lg(Nano Seconds) nano,"+"PQ without Floyd lg(Nano Seconds),"+"4-array Heap with Floyd lg(Nano Seconds),"+"" +
+                "4-array Heap without Floyd lg(Nano Seconds)");
+        for(int i = 0 ;i<input_Array.length; i++){
+            writer.printf("%.1f,%.1f,%.1f,%.1f,%.1f\n",pqn.get(i),pqFloyd.get(i),pqNoFloydFloyd.get(i),pqFourArrayHeapwithFloyd.get(i),pqFourArrayHeapwithoutFloyd.get(i));
+        }
+
+        writer.close();
     }
+
 }
