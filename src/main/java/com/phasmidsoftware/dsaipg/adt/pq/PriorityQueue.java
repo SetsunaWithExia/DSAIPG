@@ -288,7 +288,31 @@ public class PriorityQueue<K> implements Iterable<K> {
     public static void main(String[] args) throws PQException, FileNotFoundException {
         doMain();
     }
+    public static final class Input_data{
+        static int maxInput;
+        static int M;
+        static int maxOutput;
+        public Input_data(int maxInput, int M, int maxOutput) {
+            Input_data.maxInput = maxInput;
+            Input_data.M = M;
+            Input_data.maxOutput = maxOutput;
+        }
+        public static int getMaxOutput() {
+            return Input_data.maxOutput;
+        }
 
+        public static int getM() {
+            return Input_data.M;
+        }
+
+
+        public static int getMaxInput() {
+            return Input_data.maxInput;
+        }
+
+
+
+    }
     /**
      * XXX Huh?
      */
@@ -299,11 +323,13 @@ public class PriorityQueue<K> implements Iterable<K> {
 
         File file = new File("D:\\NortheasternUniversity\\INFO 6205 Program Structure and Algorithms\\Assignment4\\BenchMark.csv");
         PrintWriter writer = new PrintWriter(file);
+        int maxLength = 16384000;
+        PriorityQueue<Integer> pq= new PriorityQueue<>(maxLength,Comparator.comparing(Integer::intValue));
+        int input_Array[] = {15,31,62,125,250,500,1000,2000,4000,8000,16000,32000,64000,128000,256000,512000,1024000,2048000,4096000,8192000,16384000};
 
-        PriorityQueue<Integer> pq= new PriorityQueue<>(4096,Comparator.comparing(Integer::intValue));
-        int input_Array[] = {15,31,62,125,250,500,1000,2000,4000,8000,16000,32000,64000,128000,256000,512000,1024000};
 /*PQ with Floyd*/
-        Benchmark_Timer<Integer> benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ floyd",(maxInput)->{
+        int M,Insert,remove;
+        Benchmark_Timer<Input_data> benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ floyd",(ipt)->{
             overFill.clear();while(!pq.isEmpty()) {
             try {
                 pq.take();
@@ -311,10 +337,10 @@ public class PriorityQueue<K> implements Iterable<K> {
                 throw new RuntimeException(e);
             }
         }
-            return maxInput;
-        },(maxInput)->{
-            for(int i = 1; i <=maxInput ; i++){
-                if(pq.size() == 4095) {
+            return ipt;
+        },(ipt)->{
+            for(int i = 1; i <= Input_data.getMaxInput(); i++){
+                if(pq.size() == Input_data.getM()) {
                     try {
                         overFill.add(pq.take());
                     } catch (PQException e) {
@@ -323,7 +349,7 @@ public class PriorityQueue<K> implements Iterable<K> {
                 }
                 pq.give(random.nextInt());
             }
-            for(int i = 1; i <= 4000; i++){
+            for(int i = 1; i <= Input_data.getMaxOutput(); i++){
                 try {
                     if(!pq.isEmpty())
                       pq.take();
@@ -338,9 +364,9 @@ public class PriorityQueue<K> implements Iterable<K> {
         System.out.println("===============================");
         System.out.println("Running PQ with floyd");
         for(int i = 0; i < input_Array.length; i++){
-            double total_time = benchMarkTimer.run(input_Array[i],20);
-            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
-            pqn.add(log(input_Array[i])/log(2));
+            double total_time = benchMarkTimer.run(new Input_data(input_Array[i],input_Array[i]/4+95,input_Array[i]/4),20);
+            System.out.printf("M=%d\nInsert=%d\nRemove=%d\nAverage time (msc): %.3f\n",input_Array[i]/4+95,input_Array[i],input_Array[i]/4,total_time);
+            pqn.add(log(input_Array[i]/4+95)/log(2));
             pqFloyd.add(log((int)(total_time*1e6))/log(2));
             overFill.sort(Comparator.comparing(Integer::intValue));
             System.out.println("Total Overfill size = "+overFill.size());
@@ -350,9 +376,9 @@ public class PriorityQueue<K> implements Iterable<K> {
                 System.out.printf("No element overfill in PQ floyd\n");
             System.out.println();
         }
-/*PQ without Floyd*/
-        PriorityQueue<Integer> pq_no_floyd = new PriorityQueue<>(4096,true,Comparator.comparing(Integer::intValue),false);
-        benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ without floyd",(maxInput)->{
+/*PQ Without Floyd*/
+        PriorityQueue<Integer> pq_no_floyd = new PriorityQueue<>(maxLength,true,Comparator.comparing(Integer::intValue),false);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for PQ without floyd",(ipt)->{
             overFill.clear();while(!pq_no_floyd.isEmpty()) {
                 try {
                     pq_no_floyd.take();
@@ -360,10 +386,12 @@ public class PriorityQueue<K> implements Iterable<K> {
                     throw new RuntimeException(e);
                 }
             }
-            return maxInput;
-        },(maxInput)->{
-            for(int i = 1; i <=maxInput ; i++){
-                if(pq_no_floyd.size() == 4095) {
+            return ipt;
+        },(ipt)->{
+            int maxInput=Input_data.getMaxInput(),maxOutput=Input_data.getMaxOutput();
+            int maxM=Input_data.getM();
+            for(int i = 1; i <=maxInput; i++){
+                if(pq_no_floyd.size() == maxM) {
                     try {
                         overFill.add(pq_no_floyd.take());
                     } catch (PQException e) {
@@ -372,7 +400,7 @@ public class PriorityQueue<K> implements Iterable<K> {
                 }
                 pq_no_floyd.give(random.nextInt());
             }
-            for(int i = 1; i <= 4000; i++){
+            for(int i = 1; i <= maxOutput; i++){
                 try {
                     if(!pq_no_floyd.isEmpty())
                         pq_no_floyd.take();
@@ -386,8 +414,8 @@ public class PriorityQueue<K> implements Iterable<K> {
         ArrayList<Double> pqNoFloydFloyd = new ArrayList<>();
 
         for(int i = 0; i < input_Array.length; i++){
-            double total_time = benchMarkTimer.run(input_Array[i],20);
-            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            double total_time = benchMarkTimer.run(new Input_data(input_Array[i],input_Array[i]/4+95,input_Array[i]/4),20);
+            System.out.printf("M=%d\nInsert=%d\nRemove=%d\nAverage time (msc): %.3f\n",input_Array[i]/4+95,input_Array[i],input_Array[i]/4,total_time);
             pqNoFloydFloyd.add(log((int)(total_time*1e6))/log(2));
             overFill.sort(Comparator.comparing(Integer::intValue));
             System.out.println("Total Overfill size = "+overFill.size());
@@ -400,20 +428,21 @@ public class PriorityQueue<K> implements Iterable<K> {
 
 /*4 Array Heap With Floyd*/
         ArrayList<Double> pqFourArrayHeapwithFloyd = new ArrayList<>();
-        FourArrayHeap<Integer> fourArrayHeapwithFloyd = new FourArrayHeap<>(4095,Comparator.comparing(Integer::intValue),true,true);
-        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap with floyd",(maxInput)->{
+        FourArrayHeap<Integer> fourArrayHeapwithFloyd = new FourArrayHeap<>(maxLength,Comparator.comparing(Integer::intValue),true,true);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap with floyd",(ipt)->{
             overFill.clear();while(!fourArrayHeapwithFloyd.isEmpty()) {
                 fourArrayHeapwithFloyd.take();
             }
-            return maxInput;
-        },(maxInput)->{
+            return ipt;
+        },(ipt)->{
+            int maxInput=Input_data.getMaxInput(),maxOutput=Input_data.getMaxOutput(),maxM=Input_data.getM();
             for(int i = 1; i <=maxInput ; i++){
-                if(fourArrayHeapwithFloyd.size() == 4095) {
+                if(fourArrayHeapwithFloyd.size() == maxM) {
                     overFill.add(fourArrayHeapwithFloyd.take());
                 }
                 fourArrayHeapwithFloyd.give(random.nextInt());
             }
-            for(int i = 1; i <= 4000; i++){
+            for(int i = 1; i <= maxOutput; i++){
                 if(!fourArrayHeapwithFloyd.isEmpty())
                     fourArrayHeapwithFloyd.take();
             }
@@ -421,8 +450,8 @@ public class PriorityQueue<K> implements Iterable<K> {
         System.out.println("===============================");
         System.out.println("Running 4 Array Heap with floyd");
         for(int i = 0; i < input_Array.length; i++){
-            double total_time = benchMarkTimer.run(input_Array[i],20);
-            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            double total_time = benchMarkTimer.run(new Input_data(input_Array[i],input_Array[i]/4+95,input_Array[i]/4),20);
+            System.out.printf("M=%d\nInsert=%d\nRemove=%d\nAverage time (msc): %.3f\n",input_Array[i]/4+95,input_Array[i],input_Array[i]/4,total_time);
             pqFourArrayHeapwithFloyd.add(log((int)(total_time*1e6))/log(2));
             overFill.sort(Comparator.comparing(Integer::intValue));
             System.out.println("Total Overfill size = "+overFill.size());
@@ -434,20 +463,21 @@ public class PriorityQueue<K> implements Iterable<K> {
         }
 /*4 Array Heap Without Floyd*/
         ArrayList<Double> pqFourArrayHeapwithoutFloyd = new ArrayList<>();
-        FourArrayHeap<Integer> fourArrayHeapwithoutFloyd = new FourArrayHeap<>(4095,Comparator.comparing(Integer::intValue),false,true);
-        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap without floyd",(maxInput)->{
+        FourArrayHeap<Integer> fourArrayHeapwithoutFloyd = new FourArrayHeap<>(maxLength,Comparator.comparing(Integer::intValue),false,true);
+        benchMarkTimer = new Benchmark_Timer<>("BenchMark for 4-array Heap without floyd",(ipt)->{
             overFill.clear();while(!fourArrayHeapwithoutFloyd.isEmpty()) {
                 fourArrayHeapwithoutFloyd.take();
             }
-            return maxInput;
-        },(maxInput)->{
+            return ipt;
+        },(ipt)->{
+            int maxInput=Input_data.getMaxInput(),maxOutput=Input_data.getMaxOutput(),maxM=Input_data.getM();
             for(int i = 1; i <=maxInput ; i++){
-                if(fourArrayHeapwithoutFloyd.size() == 4095) {
+                if(fourArrayHeapwithoutFloyd.size() == maxM) {
                     overFill.add(fourArrayHeapwithoutFloyd.take());
                 }
                 fourArrayHeapwithoutFloyd.give(random.nextInt());
             }
-            for(int i = 1; i <= 4000; i++){
+            for(int i = 1; i <= maxOutput; i++){
                 if(!fourArrayHeapwithoutFloyd.isEmpty())
                     fourArrayHeapwithoutFloyd.take();
             }
@@ -455,8 +485,8 @@ public class PriorityQueue<K> implements Iterable<K> {
         System.out.println("===============================");
         System.out.println("Running 4 Array Heap without floyd");
         for(int i = 0; i < input_Array.length; i++){
-            double total_time = benchMarkTimer.run(input_Array[i],20);
-            System.out.printf("N=%d\nAverage time (msc): %.3f\n",input_Array[i],total_time);
+            double total_time = benchMarkTimer.run(new Input_data(input_Array[i],input_Array[i]/4+95,input_Array[i]/4),20);
+            System.out.printf("M=%d\nInsert=%d\nRemove=%d\nAverage time (msc): %.3f\n",input_Array[i]/4+95,input_Array[i],input_Array[i]/4,total_time);
             pqFourArrayHeapwithoutFloyd.add(log((int)(total_time*1e6))/log(2));
             overFill.sort(Comparator.comparing(Integer::intValue));
             System.out.println("Total Overfill size = "+overFill.size());

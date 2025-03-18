@@ -1,11 +1,8 @@
-/*
- * Copyright (c) 2024. Robin Hillyard
- */
-
 package com.phasmidsoftware.dsaipg.sort.par;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * ParSort is a class implementing a parallel sorting algorithm.
@@ -26,7 +23,7 @@ final class ParSort {
      * the advantages of parallelism.
      */
     public static int cutoff = 1000;
-
+    public static int parallelism = 2;
     /**
      * Sorts the specified portion of the input array using a parallel sorting algorithm.
      * If the range to be sorted is smaller than a predefined cutoff value, the method
@@ -40,9 +37,14 @@ final class ParSort {
      */
     public static void sort(int[] array, int from, int to) {
         if (to - from >= cutoff) {
+//            System.out.println("Using Parallel Sort!!!");
+//            System.out.printf("to=%d from=%d cutoff=%d\n", to, from, cutoff);
             CompletableFuture<int[]> completableFuture1 = null;
             CompletableFuture<int[]> completableFuture2 = null;
-            // TO BE IMPLEMENTED 
+            // TO BE IMPLEMENTED
+            int mid = from + (to - from) / 2;
+            completableFuture1 = asyncSort(array, from, mid);
+            completableFuture2 = asyncSort(array, mid, to);
             // END SOLUTION
             CompletableFuture<int[]> completableFuture = completableFuture1.thenCombine(completableFuture2, ParSort::doMerge);
             completableFuture.whenComplete((result, throwable) -> System.arraycopy(result, 0, array, from, result.length));
@@ -63,8 +65,10 @@ final class ParSort {
      */
     static int[] sortRecursive(int[] array, int from, int to) {
         int[] result = new int[to - from];
-        // TO BE IMPLEMENTED 
-         // NOTE you need to do something here so that result is the sorted version of array.
+        // TO BE IMPLEMENTED
+        sort(array, from, to);
+        result = Arrays.copyOfRange(array, from, to);
+//        sortRecursive(array,from,to);
         // END SOLUTION
         return result;
     }
@@ -103,7 +107,7 @@ final class ParSort {
      */
     static CompletableFuture<int[]> asyncSort(int[] array, int from, int to) {
         return CompletableFuture.supplyAsync(
-                () -> sortRecursive(array, from, to)
+                () -> sortRecursive(array, from, to),new ForkJoinPool(parallelism)
         );
     }
 }
