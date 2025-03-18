@@ -77,7 +77,7 @@ public class ParSortTest {
 
     @Test
     public void testSortRandomLargeArray() {
-        int[] array = new int[10000];
+        int[] array = new int[1000000];
         for (int i = 0; i < array.length; i++) {
             array[i] = (int) (Math.random() * 100000);
         }
@@ -102,6 +102,50 @@ public class ParSortTest {
         int[] array = {2, 4, 6, 8, 10};
         ParSort.cutoff = 10;
         ParSort.sort(array, -1, 3);
+    }
+
+    @Test
+    public void testSortWithHighCutoff() {
+        int[] array = {15, 3, 9, 12, 6};
+        int[] expected = {3, 6, 9, 12, 15};
+        ParSort.cutoff = Integer.MAX_VALUE;  // Forces sequential sorting
+        ParSort.sort(array, 0, array.length);
+        assertArrayEquals(expected, array);
+    }
+
+    @Test
+    public void testSortAllIdenticalElements() {
+        int[] array = {5, 5, 5, 5, 5};
+        int[] expected = {5, 5, 5, 5, 5};
+        ParSort.cutoff = 10;
+        ParSort.sort(array, 0, array.length);
+        assertArrayEquals(expected, array);
+    }
+
+    @Test
+    public void testSortReverseSortedArray() {
+        int[] array = {10, 9, 8, 7, 6};
+        int[] expected = {6, 7, 8, 9, 10};
+        ParSort.cutoff = 10;
+        ParSort.sort(array, 0, array.length);
+        assertArrayEquals(expected, array);
+    }
+
+    @Test
+    public void testSortInvalidRangeKeepsArrayIntact() {
+        int[] array = {5, 2, 8, 1, 9};
+        int[] original = Arrays.copyOf(array, array.length);
+        ParSort.cutoff = 10;
+        try {
+            ParSort.sort(array, 3, 2); // Invalid range
+        } catch (Throwable ignored) {}
+        assertArrayEquals(original, array);  // Ensure the array is not modified
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSortNullArray() {
+        ParSort.cutoff = 10;
+        ParSort.sort(null, 0, 5);
     }
 
     @Test
