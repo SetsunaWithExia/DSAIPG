@@ -4,7 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.adt.bqs;
 
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 public interface Bag<Item> extends SizedIterable<Item> {
 

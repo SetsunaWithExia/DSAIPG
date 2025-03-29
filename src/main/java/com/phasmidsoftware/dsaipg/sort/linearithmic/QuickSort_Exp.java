@@ -1,21 +1,42 @@
-/*
- * Copyright (c) 2024. Robin Hillyard
- */
-
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.DEFAULT_RUNS;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.DEFAULT_RUNS;
 
+/**
+ * A specialized implementation of the QuickSort algorithm with
+ * experimental partitioning. This class extends the base QuickSort class
+ * and introduces an experimental partitioner for dividing the array into
+ * partitions.
+ *
+ * @param <X> The type of elements to be sorted, which must implement Comparable.
+ */
 public class QuickSort_Exp<X extends Comparable<X>> extends QuickSort<X> {
 
     public static final String DESCRIPTION = "QuickSort basic";
 
+    /**
+     * Creates an instance of a Partitioner for use with this sorting implementation.
+     *
+     * @return a Partitioner object of type Partitioner_Exp, configured with the associated Helper.
+     */
+    public Partitioner<X> createPartitioner() {
+        return new Partitioner_Exp(getHelper());
+    }
+
+    /**
+     * Constructor for QuickSort_Exp.
+     *
+     * @param description a textual description of the execution.
+     * @param N           the number of elements expected to be sorted.
+     * @param nRuns       the number of times the sort execution is to be run.
+     * @param config      the configuration settings for the sort algorithm.
+     */
     public QuickSort_Exp(String description, int N, final int nRuns, Config config) {
         super(description, N, nRuns, config);
         setPartitioner(createPartitioner());
@@ -50,15 +71,12 @@ public class QuickSort_Exp<X extends Comparable<X>> extends QuickSort<X> {
         this(0, config);
     }
 
-    public Partitioner<X> createPartitioner() {
-        return new Partitioner_Exp(getHelper());
-    }
-
+    /**
+     * The Partitioner_Exp class is an implementation of the Partitioner interface used for dividing an array
+     * or partition into two sub-partitions. This class follows the principles of Hoare's partitioning scheme,
+     * commonly used in quicksort algorithms.
+     */
     public class Partitioner_Exp implements Partitioner<X> {
-
-        public Partitioner_Exp(Helper<X> helper) {
-            this.helper = helper;
-        }
 
         /**
          * Method to partition the given partition into smaller partitions.
@@ -107,6 +125,26 @@ public class QuickSort_Exp<X extends Comparable<X>> extends QuickSort<X> {
             return partitions;
         }
 
+        /**
+         * Constructor for the Partitioner_Exp class.
+         * Initializes the partitioner with the provided Helper instance.
+         *
+         * @param helper an instance of the Helper class which provides utility methods such as comparison
+         *               and instrumentation for sorting algorithms. The helper supports operations required
+         *               for partitioning, such as swapping elements and evaluating comparisons.
+         */
+        public Partitioner_Exp(Helper<X> helper) {
+            this.helper = helper;
+        }
+
+        /**
+         * Swaps two elements in the specified array.
+         * CONSIDER using help.swap
+         *
+         * @param ys the array in which elements are to be swapped
+         * @param i  the index of the first element to be swapped
+         * @param j  the index of the second element to be swapped
+         */
         private void swap(X[] ys, int i, int j) {
             X temp = ys[i];
             ys[i] = ys[j];

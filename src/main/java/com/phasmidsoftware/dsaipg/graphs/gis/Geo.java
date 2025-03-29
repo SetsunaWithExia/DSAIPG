@@ -6,7 +6,7 @@ package com.phasmidsoftware.dsaipg.graphs.gis;
 
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.EdgeGraph;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 public interface Geo<V extends GeoPoint, E> extends EdgeGraph<V, E> {
     /**

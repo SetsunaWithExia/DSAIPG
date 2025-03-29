@@ -4,7 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.projects.life.base;
 
-import com.phasmidsoftware.dsaipg.util.Range;
+import com.phasmidsoftware.dsaipg.util.iteration.Range;
 
 import java.util.ArrayList;
 import java.util.Collection;

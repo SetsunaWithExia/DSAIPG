@@ -6,8 +6,8 @@ package com.phasmidsoftware.dsaipg.graphs.gis;
 
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Graph_Edges;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
-import com.phasmidsoftware.dsaipg.util.SizedIterableImpl;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterableImpl;
 
 import java.util.ArrayList;
 

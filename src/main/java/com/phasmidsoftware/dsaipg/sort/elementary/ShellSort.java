@@ -3,8 +3,18 @@
  */
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.*;
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.benchmark.Stopwatch;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config_Benchmark;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.adt.threesum;
 
-import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
 import org.junit.Test;
 
 import java.util.function.Supplier;

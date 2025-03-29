@@ -3,12 +3,12 @@
  */
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
-import com.phasmidsoftware.dsaipg.sort.Sort;
-import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.Config_Benchmark;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config_Benchmark;
 
 import java.io.File;
 
@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfigFixes;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfigFixes;
 
 /**
  * A class for performing insertion sort using a comparator, extending functionality from SortWithHelper.

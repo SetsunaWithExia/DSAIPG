@@ -6,8 +6,8 @@ package com.phasmidsoftware.dsaipg.graphs.undirected;
 
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag;
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag_Array;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
-import com.phasmidsoftware.dsaipg.util.SizedIterableImpl;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterableImpl;
 
 import java.util.HashMap;
 import java.util.Map;

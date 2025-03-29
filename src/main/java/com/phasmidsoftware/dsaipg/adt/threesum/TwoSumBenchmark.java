@@ -4,12 +4,10 @@
 
 package com.phasmidsoftware.dsaipg.adt.threesum;
 
-import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
-import com.phasmidsoftware.dsaipg.util.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 /**
  * The TwoSumBenchmark class is designed to benchmark different implementations

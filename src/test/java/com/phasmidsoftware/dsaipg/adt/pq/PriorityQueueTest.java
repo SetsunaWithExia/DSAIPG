@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.Comparator;
 import java.util.Iterator;
-
 import static org.junit.Assert.*;
 
 @SuppressWarnings("ConstantConditions")

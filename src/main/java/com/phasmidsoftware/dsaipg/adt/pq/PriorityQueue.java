@@ -4,7 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.adt.pq;
 
-import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
 
 import java.io.File;
 import java.io.FileNotFoundException;

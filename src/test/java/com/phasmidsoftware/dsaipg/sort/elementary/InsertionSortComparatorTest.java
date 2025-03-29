@@ -1,12 +1,12 @@
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
 import org.junit.Test;
 
 import java.util.Comparator;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfigFixes;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfigFixes;
 import static org.junit.Assert.assertArrayEquals;
 
 /**

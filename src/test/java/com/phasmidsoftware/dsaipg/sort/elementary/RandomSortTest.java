@@ -4,21 +4,25 @@
 
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.*;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.LazyLogger;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
-import com.phasmidsoftware.dsaipg.util.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.phasmidsoftware.dsaipg.sort.BaseComparatorHelper.INVERSIONS;
-import static com.phasmidsoftware.dsaipg.sort.Instrument.COMPARES;
-import static com.phasmidsoftware.dsaipg.sort.Instrument.FIXES;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.sort.helper.BaseComparatorHelper.INVERSIONS;
+import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.COMPARES;
+import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.FIXES;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -137,11 +141,8 @@ public class RandomSortTest {
         assertTrue(helper.isSorted(ys));
         sorter.postProcess(ys);
         final int compares = (int) statPack.getStatistics(COMPARES).mean();
-        // NOTE: these are suppoed to match within about 12%.
         // Since we set a specific seed, this should always succeed.
-        // If we use true random seed and this test fails, just increase the delta a little.
-//        assertEquals(4950, compares);
-        System.out.println("comparisons: " + compares);
+        assertEquals(2013, compares);
         final int inversions = (int) statPack.getStatistics(INVERSIONS).mean();
         final int fixes = (int) statPack.getStatistics(FIXES).mean();
         System.out.println(statPack);

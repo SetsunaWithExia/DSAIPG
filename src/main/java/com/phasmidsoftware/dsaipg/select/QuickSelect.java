@@ -4,8 +4,8 @@
 
 package com.phasmidsoftware.dsaipg.select;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.NonInstrumentingComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.Partition;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_Basic;
 

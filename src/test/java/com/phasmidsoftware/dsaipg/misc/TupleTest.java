@@ -5,7 +5,7 @@
 package com.phasmidsoftware.dsaipg.misc;
 
 import com.phasmidsoftware.dsaipg.misc.equable.BaseEquable;
-import com.phasmidsoftware.dsaipg.util.Tuple;
+import com.phasmidsoftware.dsaipg.util.general.Tuple;
 import org.junit.Test;
 
 import java.util.Random;

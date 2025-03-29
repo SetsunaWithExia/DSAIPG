@@ -1,10 +1,10 @@
-/*
- * Copyright (c) 2024. Robin Hillyard
- */
-
 package com.phasmidsoftware.dsaipg.adt.symbolTable.tree;
 
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -16,8 +16,8 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import static com.phasmidsoftware.dsaipg.adt.symbolTable.tree.BSTOptimisedDeletion.random;
-import static com.phasmidsoftware.dsaipg.util.SortBenchmarkHelper.getWords;
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatDecimal3Places;
+import static com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmarkHelper.getWords;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatDecimal3Places;
 
 
 /**
