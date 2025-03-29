@@ -4,18 +4,18 @@
 
 package com.phasmidsoftware.dsaipg.sort.counting;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
-import com.phasmidsoftware.dsaipg.sort.Sort;
-import com.phasmidsoftware.dsaipg.sort.SortWithHelperAndAdditionalMemory;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelperAndAdditionalMemory;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_3way;
-import com.phasmidsoftware.dsaipg.util.CodePointMapper;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.SuffixComparator;
+import com.phasmidsoftware.dsaipg.util.general.CodePointMapper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.SuffixComparator;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.MSD_CUTOFF_DEFAULT;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.HELPER;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.MSDCUTOFF;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.MSD_CUTOFF_DEFAULT;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.MSDCUTOFF;
 
 /**
  * Implements the MSD (Most-Significant-Digit) String Sort algorithm

@@ -9,7 +9,7 @@ import com.phasmidsoftware.dsaipg.adt.bqs.Bag_Array;
 import com.phasmidsoftware.dsaipg.adt.bqs.Stack;
 import com.phasmidsoftware.dsaipg.adt.bqs.Stack_LinkedList;
 import com.phasmidsoftware.dsaipg.graphs.undirected.AbstractGraph;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 import java.util.*;
 import java.util.function.Consumer;

@@ -2,7 +2,7 @@ package com.phasmidsoftware.dsaipg.graphs.dag;
 
 import com.phasmidsoftware.dsaipg.adt.bqs.BQSException;
 import com.phasmidsoftware.dsaipg.adt.bqs.Stack;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 import org.junit.Test;
 
 import java.util.Iterator;

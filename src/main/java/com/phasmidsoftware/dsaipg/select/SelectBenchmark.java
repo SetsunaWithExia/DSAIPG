@@ -4,11 +4,11 @@
 
 package com.phasmidsoftware.dsaipg.select;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.NonInstrumentingComparableHelper;
-import com.phasmidsoftware.dsaipg.util.Benchmark;
-import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;

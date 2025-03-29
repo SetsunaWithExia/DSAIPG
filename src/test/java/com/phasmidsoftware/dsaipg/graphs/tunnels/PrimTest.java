@@ -6,7 +6,7 @@ import com.phasmidsoftware.dsaipg.graphs.gis.Sequenced;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.EdgeGraph;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Graph_Edges;
-import com.phasmidsoftware.dsaipg.util.SizedIterableImpl;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterableImpl;
 import org.junit.Test;
 
 import java.util.ArrayList;

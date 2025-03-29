@@ -4,15 +4,11 @@
 
 package com.phasmidsoftware.dsaipg.adt.threesum;
 
-import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
-import com.phasmidsoftware.dsaipg.util.TimeLogger;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 /**
  * The ThreeSumBenchmark class provides a framework for evaluating and comparing

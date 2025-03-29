@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.sort.classic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import org.junit.Test;
 
 import java.io.IOException;

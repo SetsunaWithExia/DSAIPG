@@ -4,12 +4,12 @@
 
 package com.phasmidsoftware.dsaipg.sort.counting;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
-import com.phasmidsoftware.dsaipg.sort.SortException;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
 import com.phasmidsoftware.dsaipg.sort.classic.ClassificationSorter;
-import com.phasmidsoftware.dsaipg.util.CodePointMapper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.general.CodePointMapper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.Arrays;
 import java.util.Comparator;

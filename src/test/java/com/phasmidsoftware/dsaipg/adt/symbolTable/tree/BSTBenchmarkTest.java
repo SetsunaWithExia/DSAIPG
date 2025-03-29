@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.adt.symbolTable.tree;
 
-import com.phasmidsoftware.dsaipg.util.SortBenchmark;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import org.junit.Test;
 
 import java.util.function.Supplier;

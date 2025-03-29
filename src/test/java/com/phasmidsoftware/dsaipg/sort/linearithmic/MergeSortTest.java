@@ -4,15 +4,15 @@
 
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
-import com.phasmidsoftware.dsaipg.sort.Sort;
-import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
 import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSort;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.LazyLogger;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
 import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
-import com.phasmidsoftware.dsaipg.util.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.phasmidsoftware.dsaipg.sort.Instrument.*;
-import static com.phasmidsoftware.dsaipg.util.ConfigTest.INVERSIONS;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig2;
+import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.*;
+import static com.phasmidsoftware.dsaipg.util.config.ConfigTest.INVERSIONS;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig2;
 import static org.junit.Assert.*;
 
 @SuppressWarnings("ALL")

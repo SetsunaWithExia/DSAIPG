@@ -1,17 +1,13 @@
-/*
- * Copyright (c) 2024. Robin Hillyard
- */
-
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.SortException;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
 
 /**
  * Class QuickSort_DualPivot which extends QuickSort.
@@ -22,6 +18,25 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
 
     public static final String DESCRIPTION = "QuickSort dual pivot";
 
+    /**
+     * Creates and returns a Dual Pivot partitioner for use in sorting algorithms.
+     * The returned partitioner leverages the dual-pivot partitioning strategy for dividing
+     * the input data into multiple smaller partitions, which is commonly used in optimized quicksort implementations.
+     *
+     * @return a Partitioner instance using a dual-pivot strategy initialized with the associated helper.
+     */
+    public Partitioner<X> createPartitioner() {
+        return new Partitioner_DualPivot(getHelper());
+    }
+
+    /**
+     * Constructor for QuickSort_DualPivot.
+     *
+     * @param description a short description of the sorting instance.
+     * @param N           the number of elements expected to be sorted.
+     * @param nRuns       the number of times the sort operation will run for benchmarking or testing.
+     * @param config      the configuration settings for the sorting process.
+     */
     public QuickSort_DualPivot(String description, int N, int nRuns, Config config) {
         super(description, N, nRuns, config);
         setPartitioner(createPartitioner());
@@ -58,12 +73,19 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
         this(DESCRIPTION, N, getRunsConfig(config), config);
     }
 
-    public Partitioner<X> createPartitioner() {
-        return new Partitioner_DualPivot(getHelper());
-    }
-
+    /**
+     * This class implements a dual-pivot partitioning strategy for use in sorting algorithms, such as quicksort.
+     * Dual-pivot partitioning is an optimization of the classic quicksort partitioning approach, utilizing two pivots
+     * to divide the input data into three distinct regions for more efficient sorting.
+     */
     public class Partitioner_DualPivot implements Partitioner<X> {
 
+        /**
+         * Constructor for Partitioner_DualPivot.
+         * This constructor initializes the Partitioner_DualPivot instance with a provided helper.
+         *
+         * @param helper a Helper instance that provides utility methods and support for the partitioning process.
+         */
         public Partitioner_DualPivot(Helper<X> helper) {
             this.helper = helper;
         }
@@ -131,7 +153,14 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
             return partitions;
         }
 
-        // CONSIDER invoke swap in BaseHelper.
+        /**
+         * Swaps the elements at the specified positions in the given array.
+         * CONSIDER invoke swap in Helper.
+         *
+         * @param ys the array in which the elements need to be swapped
+         * @param i  the index of the first element to be swapped
+         * @param j  the index of the second element to be swapped
+         */
         private void swap(X[] ys, int i, int j) {
             X temp = ys[i];
             ys[i] = ys[j];

@@ -6,7 +6,7 @@ import com.phasmidsoftware.dsaipg.graphs.tunnels.TunnelProperties;
 import com.phasmidsoftware.dsaipg.graphs.tunnels.Tunnels_Kruskal;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -4,8 +4,8 @@
 
 package com.phasmidsoftware.dsaipg.adt.bqs;
 
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
-import com.phasmidsoftware.dsaipg.util.SizedIterableImpl;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterableImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

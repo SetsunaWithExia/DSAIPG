@@ -4,8 +4,18 @@
 
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.*;
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Instrumenter;
+import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
+import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,10 +23,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import static com.phasmidsoftware.dsaipg.sort.Instrument.*;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
-import static com.phasmidsoftware.dsaipg.util.SortBenchmarkHelper.getWords;
-import static com.phasmidsoftware.dsaipg.util.Utilities.round;
+import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.*;
+import static com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmarkHelper.getWords;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.round;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

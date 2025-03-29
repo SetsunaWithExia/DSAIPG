@@ -4,10 +4,10 @@
 
 package com.phasmidsoftware.dsaipg.sort.classic;
 
-import com.phasmidsoftware.dsaipg.sort.Classifier;
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.SortException;
-import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.generic.Classifier;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

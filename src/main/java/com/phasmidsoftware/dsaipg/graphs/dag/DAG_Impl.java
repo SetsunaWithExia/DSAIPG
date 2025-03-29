@@ -6,7 +6,7 @@ package com.phasmidsoftware.dsaipg.graphs.dag;
 
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag;
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag_Array;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 import java.util.Random;
 import java.util.TreeSet;

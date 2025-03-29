@@ -14,7 +14,7 @@ import com.phasmidsoftware.dsaipg.graphs.undirected.Graph_Edges;
 import com.phasmidsoftware.dsaipg.graphs.union_find.TypedUF;
 import com.phasmidsoftware.dsaipg.graphs.union_find.TypedUF_HWQUPC;
 import com.phasmidsoftware.dsaipg.graphs.union_find.UFException;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 import java.util.ArrayList;
 import java.util.Comparator;

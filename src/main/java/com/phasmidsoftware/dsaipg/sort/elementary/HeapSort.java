@@ -1,12 +1,8 @@
-/*
- * Copyright (c) 2024. Robin Hillyard
- */
-
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.SortWithComparableHelper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 /**
  * Implementation of the Heap Sort algorithm for sorting an array of elements that implement the Comparable interface.
@@ -18,6 +14,9 @@ import com.phasmidsoftware.dsaipg.util.Config;
  * while the remaining heap is restored as a max-heap.
  * <p>
  * This class extends SortWithComparableHelper and provides specific sorting logic using the heap structure.
+ * <p>
+ *     CONSIDER using the heapConstructor() method of PriorityQueue.
+ * </p>
  *
  * @param <X> The type of the elements to be sorted, which must extend Comparable.
  */
