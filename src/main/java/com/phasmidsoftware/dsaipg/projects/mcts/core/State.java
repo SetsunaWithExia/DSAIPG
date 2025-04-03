@@ -6,6 +6,7 @@ package com.phasmidsoftware.dsaipg.projects.mcts.core;
 
 import com.phasmidsoftware.dsaipg.adt.bqs.UnorderedIterator;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -92,6 +93,14 @@ public interface State<G extends Game> {
      */
     default Move<G> chooseMove(int player) {
         Iterator<Move<G>> iterator = moveIterator(player);
+
+//        Iterator<Move<G>> iterator2 = moveIterator(player);
+//        while(iterator2.hasNext()){
+//            Move<G> move = iterator2.next();
+//            int[] nextStep = move.getCoordinates
+//            System.out.println(move);
+//        }
+
         if (iterator.hasNext()) return iterator.next();
         throw new RuntimeException("empty move iterator");
     }

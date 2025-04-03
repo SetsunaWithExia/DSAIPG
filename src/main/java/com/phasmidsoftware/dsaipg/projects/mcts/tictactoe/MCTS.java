@@ -22,5 +22,9 @@ public class MCTS {
         this.root = root;
     }
 
+//    public Node<TicTacToe> search(int resources) {
+//        root.explore();
+//
+//    }
     private final Node<TicTacToe> root;
 }

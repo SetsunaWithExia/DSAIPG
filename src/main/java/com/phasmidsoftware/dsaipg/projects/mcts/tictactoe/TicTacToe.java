@@ -130,7 +130,9 @@ public class TicTacToe implements Game<TicTacToe> {
         public int[] move() {
             return new int[]{i, j};
         }
-
+        public int[] getCoordinates() {
+            return new int[]{i, j};
+        }
         private final int player;
         private final int i;
         private final int j;
