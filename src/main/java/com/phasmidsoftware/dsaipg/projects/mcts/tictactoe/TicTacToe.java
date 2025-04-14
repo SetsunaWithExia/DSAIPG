@@ -8,6 +8,7 @@ import com.phasmidsoftware.dsaipg.projects.mcts.core.Game;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.*;
 
 /**
@@ -21,13 +22,13 @@ public class TicTacToe implements Game<TicTacToe> {
      */
     public static void main(String[] args) {
         // NOTE the behavior of the game to be run will be based on the TicTacToe instance field: random.
-        State<TicTacToe> state = new TicTacToe().runGame();
+        State<TicTacToe> state = new TicTacToe(1000).runGameMCTS();
         if (state.winner().isPresent()) System.out.println("TicTacToe: winner is: " + state.winner().get());
         else System.out.println("TicTacToe: draw");
     }
 
-    public static final int X = 1;
-    public static final int O = 0;
+    public static final int X = 1;    //Machine
+    public static final int O = 0;    // Human
     public static final int blank = -1;
 
     /**
@@ -44,16 +45,45 @@ public class TicTacToe implements Game<TicTacToe> {
      *
      * @return the terminal State.
      */
-    State<TicTacToe> runGame() {
-        State<TicTacToe> state = start();
+    TicTacToeState runGame() {
+        TicTacToeState state = start();
         int player = opener();
+
         while (!state.isTerminal()) {
             state = state.next(state.chooseMove(player));
             player = 1 - player;
         }
         return state;
     }
+    TicTacToeState runGameMCTS(){
+        TicTacToeState state = start();
 
+        int player = opener();
+        Scanner scanner = new Scanner(System.in);
+        while (!state.isTerminal()) {
+            if(player == opener()){             //if player is opener (machine) then use MCTS move
+                System.out.println("Machine Round");
+                System.out.println("MCTS Searching...");
+                MCTS mcts = new MCTS(new TicTacToeNode(state),1000);
+                System.out.println("MCTS Moving...");
+                TicTacToeMove move = mcts.getBestMove();
+                int[] cordinate = move.getCoordinates();
+                System.out.printf("MCTS choose + %d %d\n",cordinate[0],cordinate[1]);
+                state = state.next(move);
+            }else{                              //player is human, waiting for human input
+                System.out.println("Human Round");
+                System.out.printf(state.toString());
+                int i,j;
+                System.out.println("Please enter row");
+                i = scanner.nextInt();
+                System.out.println("Please enter column");
+                j = scanner.nextInt();
+                TicTacToeMove move = new TicTacToeMove(player,i,j);
+                state = state.next(move);
+            }
+        }
+        return state;
+    }
     /**
      * This method determines the opening player (the "white" by analogy with chess).
      * NOTE this should agree with
@@ -69,8 +99,8 @@ public class TicTacToe implements Game<TicTacToe> {
      *
      * @return a State of TicTacToe.
      */
-    public State<TicTacToe> start() {
-        return new TicTacToeState();
+    public TicTacToeState start() {
+        return new TicTacToeState(random,TicTacToe.startingPosition());
     }
 
     /**
@@ -100,146 +130,5 @@ public class TicTacToe implements Game<TicTacToe> {
 
     private final Random random;
 
-    /**
-     * Inner class to define a Move of TicTacToe.
-     */
-    static class TicTacToeMove implements Move<TicTacToe> {
-        /**
-         * @return the player for this Move.
-         */
-        public int player() {
-            return player;
-        }
 
-        /**
-         * Primary constructor.
-         *
-         * @param player the player.
-         * @param i      the row.
-         * @param j      the column.
-         */
-        public TicTacToeMove(int player, int i, int j) {
-            this.player = player;
-            this.i = i;
-            this.j = j;
-        }
-
-        /**
-         * @return this move as an array of two coordinates: row and column.
-         */
-        public int[] move() {
-            return new int[]{i, j};
-        }
-
-        private final int player;
-        private final int i;
-        private final int j;
-    }
-
-    /**
-     * Inner class to define a State of TicTacToe.
-     */
-    class TicTacToeState implements State<TicTacToe> {
-        /**
-         * Method to yield the game of which this is a State.
-         *
-         * @return a G
-         */
-        public TicTacToe game() {
-            return TicTacToe.this;
-        }
-
-        /**
-         * Method to determine the player who plays to this State.
-         * The first player to play is considered to be "white" by analogy with chess.
-         *
-         * @return a non-negative integer.
-         */
-        public int player() {
-            return switch (position.last) {
-                case 0, -1 -> X;
-                case 1 -> O;
-                default -> blank;
-            };
-        }
-
-        /**
-         * @return the Position of this State.
-         */
-        public Position position() {
-            return this.position;
-        }
-
-        /**
-         * Method to determine if this State represents the end of the game?
-         *
-         * @return an optional int if this State is a win/loss/draw.
-         */
-        public Optional<Integer> winner() {
-            return position.winner();
-        }
-
-        /**
-         * A random source associated with this State.
-         * Currently, it is set to the same random as used by TicTacToe.
-         * If you need a different random for each state, override this.
-         *
-         * @return the appropriate RandomState.
-         */
-        public Random random() {
-            return random;
-        }
-
-        /**
-         * Get the moves that can be made directly from the given state.
-         * The moves can be in any order--the order will be randomized for usage.
-         *
-         * @return all the possible moves from this state.
-         */
-        public Collection<Move<TicTacToe>> moves(int player) {
-            if (player == position.last) throw new RuntimeException("consecutive moves by same player: " + player);
-            List<int[]> moves = position.moves(player);
-            ArrayList<Move<TicTacToe>> list = new ArrayList<>();
-            for (int[] coordinates : moves) list.add(new TicTacToeMove(player, coordinates[0], coordinates[1]));
-            return list;
-        }
-
-        /**
-         * Implement the given move on the given state.
-         *
-         * @param move the move to implement.
-         * @return a new state.
-         */
-        public State<TicTacToe> next(Move<TicTacToe> move) {
-            TicTacToeMove ticTacToeMove = (TicTacToeMove) move;
-            int[] ints = ticTacToeMove.move();
-            return new TicTacToeState(position.move(move.player(), ints[0], ints[1]));
-        }
-
-        /**
-         * Is the game over?
-         *
-         * @return true if position is full or if position is a winner.
-         */
-        public boolean isTerminal() {
-            return position.full() || position.winner().isPresent();
-        }
-
-        @Override
-        public String toString() {
-            return "TicTacToe{\n" +
-                    position +
-                    "\n}";
-        }
-
-        public TicTacToeState(Position position) {
-            this.position = position;
-        }
-
-        public TicTacToeState() {
-            this(startingPosition());
-        }
-
-        private final Position position;
-    }
 }

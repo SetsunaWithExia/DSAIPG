@@ -47,14 +47,13 @@ public interface Node<G extends Game> {
         if (isLeaf()) return;
         if (children().isEmpty()) {
             addChildren(state());
-            backPropagate();
         } else throw new RuntimeException("exploration done already for " + this);
     }
 
     /**
      * This method sets the number of wins and playouts according to the children states.
      */
-    void backPropagate();
+  //  void backPropagate();
 
     /**
      * Method to add a child to this Node.
@@ -66,13 +65,13 @@ public interface Node<G extends Game> {
     /**
      * @return the score for this Node and its descendents a win is worth 2 points, a draw is worth 1 point.
      */
-    int wins();
+    int val();
 
     /**
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
-    int playouts();
-
+    int vis();
+    int modify();
     private void addChildren(final State<G> state) {
         for (Iterator<Move<G>> it = state.moveIterator(state.player()); it.hasNext(); )
             addChild(state.next(it.next()));
