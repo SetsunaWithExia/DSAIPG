@@ -136,7 +136,6 @@ public class Position {
         if (count > 4 && threeInARow()) return Optional.of(last);
         return Optional.empty();
     }
-
     /**
      * Method to determine if this Position has three in a row (i.e. a winning position).
      * Don't forget to check for columns and diagonals as well.
@@ -251,7 +250,16 @@ public class Position {
         }
         return sb.toString();
     }
-
+    public static int[] Getmove(Position prevA, Position prevB){
+        for(int i = 0; i < gridSize; i++){
+            for(int j = 0; j < gridSize; j++){
+                if(prevA.grid[i][j] != prevB.grid[i][j]){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        throw new RuntimeException("The State of Next Movement is the same of Previous.");
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
