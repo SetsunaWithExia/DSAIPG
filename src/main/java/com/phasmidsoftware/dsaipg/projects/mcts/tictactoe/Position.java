@@ -322,7 +322,7 @@ public class Position {
         matrix[i2][j2] = temp;
     }
 
-    private final int[][] grid;
+    public final int[][] grid;
     final int last;
     private final int count;
     private final static int gridSize = 3;
