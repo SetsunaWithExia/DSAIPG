@@ -18,7 +18,7 @@ public class Connect4Node implements Node<Connect4> {
     }
 
     @Override
-    public boolean white() {
+    public boolean black() {
         return false;
     }
 
@@ -47,8 +47,5 @@ public class Connect4Node implements Node<Connect4> {
         return 0;
     }
 
-    @Override
-    public int modify() {
-        return 0;
-    }
+
 }

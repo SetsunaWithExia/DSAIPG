@@ -1,8 +1,10 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.tictactoe;
 
+import com.phasmidsoftware.dsaipg.projects.mcts.core.Game;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
 
+import java.time.Clock;
 import java.util.*;
 
 import static com.phasmidsoftware.dsaipg.projects.mcts.tictactoe.TicTacToe.startingPosition;
@@ -15,19 +17,6 @@ public class TicTacToeState implements State<TicTacToe> {
      * @return a G
      */
     TicTacToe game;
-    public TicTacToeState(TicTacToe game, Position position) {
-        this.game = game;
-        this.position = position;
-    }
-    public TicTacToeState(Position position,int player) {
-        this.position = position;
-        this.player = player;
-    }
-    public TicTacToeState() {
-        this(startingPosition());
-    }
-
-
     public TicTacToe game() {
         return this.game;
     }
@@ -41,8 +30,8 @@ public class TicTacToeState implements State<TicTacToe> {
 
     public int player() {
         return switch (position.last) {
-            case 0, -1 -> X;
-            case 1 -> O;
+            case 0 -> X;
+            case 1, -1 -> O;
             default -> blank;
         };
     }
@@ -73,10 +62,7 @@ public class TicTacToeState implements State<TicTacToe> {
     public Random random() {
         return random;
     }
-    public TicTacToeState(Random random, Position position) {
-        this.random = random;
-        this.position = position;
-    }
+
     /**
      * Get the moves that can be made directly from the given state.
      * The moves can be in any order--the order will be randomized for usage.
@@ -86,6 +72,12 @@ public class TicTacToeState implements State<TicTacToe> {
     public Collection<Move<TicTacToe>> moves(int player) {
         if (player == position.last) throw new RuntimeException("consecutive moves by same player: " + player);
         List<int[]> moves = position.moves(player);
+  //      int step = 0;
+ //       System.out.println("Size="+moves.size());
+//        for (int[] move : moves) {
+//            step++;
+//            System.out.println("Move"+ step +" i = " + move[0] + ", j = " + move[1]);
+//        }
         ArrayList<Move<TicTacToe>> list = new ArrayList<>();
         for (int[] coordinates : moves) list.add(new TicTacToeMove(player, coordinates[0], coordinates[1]));
         return list;
@@ -100,7 +92,7 @@ public class TicTacToeState implements State<TicTacToe> {
     public TicTacToeState next(Move<TicTacToe> move) {
         TicTacToeMove ticTacToeMove = (TicTacToeMove) move;
         int[] ints = ticTacToeMove.move();
-        return new TicTacToeState(position.move(move.player(), ints[0], ints[1]));
+        return new TicTacToeState(game,random,position.move(move.player(), ints[0], ints[1]));
     }
 
     /**
@@ -111,25 +103,30 @@ public class TicTacToeState implements State<TicTacToe> {
     public boolean isTerminal() {
         return position.full() || position.winner().isPresent();
     }
-    public boolean isFull(){
-        return position.full();
-    }
+
     @Override
     public String toString() {
-        return "TicTacToe{\n" +
-                position +
-                "\n}";
+        return position().render();
     }
-    public String printState(){
-        return position.render();
-    }
+
     public TicTacToeState(Position position) {
         this.position = position;
     }
-
+    public TicTacToeState(){
+        this(TicTacToe.startingPosition());
+    }
+    public TicTacToeState(TicTacToe game,Random random, Position position) {
+        this.game = game;
+        this.random=random;
+        this.position = position;
+    }
+//    public TicTacToeState(TicTacToeState last, Position position) {
+//        this.game = last.game;
+//        this.random=last.random;
+//        this.position = position;
+//    }
     private Random random;
     private final Position position;
-    public  int player;
     public static final int X = 1;
     public static final int O = 0;
     public static final int blank = -1;

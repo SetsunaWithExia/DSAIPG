@@ -24,10 +24,10 @@ public class TicTacToeNodeTest {
     }
 
     @Test
-    public void white() {
+    public void black() {
         TicTacToeState state = new TicTacToeState();
         TicTacToeNode node = new TicTacToeNode(state);
-        assertTrue(node.white());
+        assertTrue(node.black());
     }
 
     @Test
@@ -43,5 +43,9 @@ public class TicTacToeNodeTest {
     @Test
     public void backPropagate() {
         // no tests yet
+    }
+    @Test
+    public void isTerminal() {
+
     }
 }

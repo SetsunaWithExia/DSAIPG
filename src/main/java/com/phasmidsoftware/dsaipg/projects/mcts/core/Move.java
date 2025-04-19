@@ -16,4 +16,5 @@ public interface Move<G extends Game> {
      * @return the player.
      */
     int player();
+    int[] getCoordinates();
 }

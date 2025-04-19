@@ -30,7 +30,7 @@ public interface Node<G extends Game> {
      *
      * @return true if this node represents a "white" move; false for "black."
      */
-    boolean white();
+    boolean black();
 
     /**
      * Method to yield the children of this Node.
@@ -71,10 +71,13 @@ public interface Node<G extends Game> {
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
     int vis();
-    int modify();
     private void addChildren(final State<G> state) {
-        for (Iterator<Move<G>> it = state.moveIterator(state.player()); it.hasNext(); )
+    //    int cnt = 0;
+        for (Iterator<Move<G>> it = state.moveIterator(state.player()); it.hasNext(); ){
             addChild(state.next(it.next()));
+//            cnt++;
+//            System.out.println("added child " +cnt);
+        }
     }
 
 }

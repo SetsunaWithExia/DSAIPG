@@ -23,12 +23,23 @@ public class TicTacToe implements Game<TicTacToe> {
     public static void main(String[] args) {
         // NOTE the behavior of the game to be run will be based on the TicTacToe instance field: random.
         State<TicTacToe> state = new TicTacToe(1000).runGameMCTS();
-        if (state.winner().isPresent()) System.out.println("TicTacToe: winner is: " + state.winner().get());
+        if (state.winner().isPresent()) {
+            System.out.println("!!!!!!!!!!!! Three In A Row !!!!!!!!!!!!");
+            System.out.println("TicTacToe winner is: " + (state.winner().get() == 0 ? "Machine":"Human"));
+        }
+
         else System.out.println("TicTacToe: draw");
+//        String start = ". . .\n. . .\n. . .";
+//
+//        Position position = Position.parsePosition(start,1);
+//        System.out.println(position.render());
+
+//        State<TicTacToe> state1 = new TicTacToe(1000).start();
+//        System.out.println(state1.toString());
     }
 
-    public static final int X = 1;    //Machine
-    public static final int O = 0;    // Human
+    public static final int X = 1;    // Human
+    public static final int O = 0;   //Machine
     public static final int blank = -1;
 
     /**
@@ -57,29 +68,28 @@ public class TicTacToe implements Game<TicTacToe> {
     }
     TicTacToeState runGameMCTS(){
         TicTacToeState state = start();
-
-        int player = opener();
         Scanner scanner = new Scanner(System.in);
         while (!state.isTerminal()) {
-            if(player == opener()){             //if player is opener (machine) then use MCTS move
+            if(state.player() == opener()){             //if player is opener (machine) then use MCTS move
                 System.out.println("Machine Round");
-                System.out.println("MCTS Searching...");
+                //System.out.println("MCTS Searching...");
                 MCTS mcts = new MCTS(new TicTacToeNode(state),1000);
-                System.out.println("MCTS Moving...");
+
+               // System.out.println("MCTS Moving...");
                 TicTacToeMove move = mcts.getBestMove();
                 int[] cordinate = move.getCoordinates();
-                System.out.printf("MCTS choose + %d %d\n",cordinate[0],cordinate[1]);
+                System.out.printf("MCTS choose row: %d , column %d\n",cordinate[0],cordinate[1]);
                 state = state.next(move);
+                System.out.println(state);
             }else{                              //player is human, waiting for human input
                 System.out.println("Human Round");
-                System.out.printf(state.toString());
                 int i,j;
-                System.out.println("Please enter row");
+                System.out.println("Please enter row and column");
                 i = scanner.nextInt();
-                System.out.println("Please enter column");
                 j = scanner.nextInt();
-                TicTacToeMove move = new TicTacToeMove(player,i,j);
+                TicTacToeMove move = new TicTacToeMove(state.player(), i,j);
                 state = state.next(move);
+                System.out.println(state);
             }
         }
         return state;
@@ -91,7 +101,7 @@ public class TicTacToe implements Game<TicTacToe> {
      * @return the opening player.
      */
     public int opener() {
-        return X;
+        return O;
     }
 
     /**
@@ -100,7 +110,7 @@ public class TicTacToe implements Game<TicTacToe> {
      * @return a State of TicTacToe.
      */
     public TicTacToeState start() {
-        return new TicTacToeState(random,TicTacToe.startingPosition());
+        return new TicTacToeState(this,random,TicTacToe.startingPosition());
     }
 
     /**

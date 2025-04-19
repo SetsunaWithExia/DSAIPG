@@ -15,17 +15,13 @@ import javax.swing.*;
  */
 public class MCTS {
 
-    public static void main(String[] args) {
-
-        TicTacToe ticTacToe = new TicTacToe(100);
-        MCTS mcts = new MCTS(new TicTacToeNode(ticTacToe.start()),100);
-        Node<TicTacToe> root = mcts.root;
-
-        // This is where you process the MCTS to try to win the game.
-    }
+   // public static void main(String[] args) {
+        // Please use TicTacToe to run the game
+    //}
 
     public MCTS(TicTacToeNode root,int resource) {
         this.root = root;
+        root.initializeRoot();
         this.resource = resource;
     }
     public TicTacToeMove getBestMove() {
@@ -37,51 +33,73 @@ public class MCTS {
 
         TicTacToeState childState =   root.childWithHighestUCT().state();
         int[] nextStep = Position.Getmove(root.state().position(), childState.position());
-        return new TicTacToeMove(root.state().player,nextStep[0],nextStep[1]);
+        return new TicTacToeMove(root.state().player(),nextStep[0],nextStep[1]);
     }
-    public TicTacToeNode traverse(TicTacToeNode cur) {
+    public TicTacToeState traverse(TicTacToeNode cur) {
+//        System.out.println(cur.state());
+//        System.out.println("vis = "+cur.vis());
         if(cur.isLeaf()){
-            cur.backPropagate(-1);
-            return cur;
+            return visit(cur);
         }
         if(cur.children().isEmpty()){
             cur.explore();
         }
+
         if(cur.fullyExpanded()){
+            //System.out.println("Finding Best Child");
+           // System.out.println("Finding Best Child");
+
             TicTacToeNode bestChild = cur.childWithHighestUCT();
-            backPropagate(bestChild,  traverse(bestChild));
-            return cur;
-        }else{
-            int unvisitedChild = cur.unvisited();
-            if(unvisitedChild>=0){
-                backPropagate(cur,expand(cur,unvisitedChild));
-            }else{
+            TicTacToeState leaf = traverse(bestChild);
+            backPropagate(cur, leaf);
+            return leaf;
+        }else {
+            //System.out.println("Visiting");
+            TicTacToeNode unvisitedChild = cur.unvisited();
+            if (unvisitedChild != null) {
+                TicTacToeState leaf = visit(unvisitedChild);
+                backPropagate(cur, leaf);
+                return leaf;
+            } else {
+
                 throw new RuntimeException("Unvisited child Not Found");
             }
-            return cur;
         }
+    }
+    /**
+        Start From an unvisited children, simulate its result randomly and return an end Node
+        @return Result node of simulation
+    */
+    public TicTacToeState visit(TicTacToeNode cur) {
 
+        TicTacToeState leaf = simulate(cur);
+        backPropagate(cur,leaf);
+
+        return leaf;
     }
-    public TicTacToeNode expand(TicTacToeNode cur, int child) {
-        if(cur.getChild(child).isLeaf()){
-            cur.getChild(child).backPropagate(cur.getChild(child).winner()?-1:0);
-        }else{
-            TicTacToeNode leaf = simulate(cur.getChild(child));
-            cur.getChild(child).backPropagate(leaf.winner()?1:0);
-        }
-        return cur.getChild(child);
-    }
-    public TicTacToeNode simulate(TicTacToeNode cur) {
-        TicTacToeState state = new TicTacToeState(cur.state().random(),cur.state().position());
+    /**
+     * Use random step method to keep going the game for both players
+     * @return Result of random playing for both players
+     */
+
+
+    public TicTacToeState simulate(TicTacToeNode cur) {
+        //System.out.println("Simulating " + cur.state());
+        TicTacToeState state = new TicTacToeState(cur.state().game(), cur.state().random(),cur.state().position());
         int player = cur.state().player();
         while(!state.isTerminal()){
             state=state.next(state.chooseMove(player));
             player ^= 1;
         }
-        return new TicTacToeNode(state);
+        return state;
     }
-    public void backPropagate(TicTacToeNode parent, TicTacToeNode child) {
-        parent.backPropagate(child.modify());
+    public void backPropagate(TicTacToeNode ancestorNode, TicTacToeState leafState) {
+        int leafWin=leafState.winner().isPresent() ? 1:0;
+        if(ancestorNode.state().player()!=leafState.player()){
+           ancestorNode.setUpdateValue(-leafWin);
+        }else{
+            ancestorNode.setUpdateValue(leafWin);
+        }
     }
 
     private final TicTacToeNode root;

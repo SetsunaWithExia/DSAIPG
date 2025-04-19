@@ -34,51 +34,47 @@ public class MCTS {
 
         TicTacToeState childState =   root.childWithHighestUCT().state();
         int[] nextStep = Position.Getmove(root.state().position(), childState.position());
-        return new TicTacToeMove(root.state().player,nextStep[0],nextStep[1]);
+        return new TicTacToeMove(root.state().player(),nextStep[0],nextStep[1]);
     }
-    public TicTacToeNode traverse(TicTacToeNode cur) {
-        if(cur.isLeaf()){
-            cur.backPropagate(-1);
-            return cur;
-        }
-        if(cur.children().isEmpty()){
-            cur.explore();
-        }
+    public TicTacToeState traverse(TicTacToeNode cur) {
+        if(cur.isLeaf()) return expand(cur);
+
+        if(cur.children().isEmpty()) cur.explore();
+
         if(cur.fullyExpanded()){
             TicTacToeNode bestChild = cur.childWithHighestUCT();
-            backPropagate(bestChild,  traverse(bestChild));
-            return cur;
+            TicTacToeState leaf = traverse(bestChild);
+            backPropagate(cur,  leaf);
+            return leaf;
         }else{
-            int unvisitedChild = cur.unvisited();
-            if(unvisitedChild>=0){
-                backPropagate(cur,expand(cur,unvisitedChild));
-            }else{
-                throw new RuntimeException("Unvisited child Not Found");
-            }
-            return cur;
+            TicTacToeState leaf = expand(cur.unvisited());
+            backPropagate(cur, leaf);
+            return leaf;
         }
+    }
+    public TicTacToeState expand(TicTacToeNode cur) {
 
+            TicTacToeState leaf = simulate(cur);
+            backPropagate(cur,leaf);
+
+        return leaf;
     }
-    public TicTacToeNode expand(TicTacToeNode cur, int child) {
-        if(cur.getChild(child).isLeaf()){
-            cur.getChild(child).backPropagate(cur.getChild(child).winner()?-1:0);
-        }else{
-            TicTacToeNode leaf = simulate(cur.getChild(child));
-            cur.getChild(child).backPropagate(leaf.winner()?1:0);
-        }
-        return cur.getChild(child);
-    }
-    public TicTacToeNode simulate(TicTacToeNode cur) {
-        TicTacToeState state = new TicTacToeState(cur.state().random(),cur.state().position());
+    public TicTacToeState simulate(TicTacToeNode cur) {
+        TicTacToeState state = new TicTacToeState(cur.state().game(), cur.state().random(),cur.state().position());
         int player = cur.state().player();
         while(!state.isTerminal()){
             state=state.next(state.chooseMove(player));
             player ^= 1;
         }
-        return new TicTacToeNode(state);
+        return state;
     }
-    public void backPropagate(TicTacToeNode parent, TicTacToeNode child) {
-        parent.backPropagate(child.modify());
+    public void backPropagate(TicTacToeNode ancestorNode, TicTacToeState leafState) {
+        int leafWin=leafState.winner().isPresent() ? 1:0;
+        if(ancestorNode.state().player()!=leafState.player()){
+            ancestorNode.setUpdateValue(-leafWin);
+        }else{
+            ancestorNode.setUpdateValue(leafWin);
+        }
     }
 
     private final TicTacToeNode root;
