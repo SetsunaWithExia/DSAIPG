@@ -31,12 +31,12 @@ public class TicTacToeNode implements Node<TicTacToe> {
 
     /**
      * Method to determine if the player who plays to this node is the opening player (by analogy with chess).
-     * For this method, we assume that X goes first so is "white."
+     * For this method, we assume that O goes first so is "black."
      * NOTE: this assumes a two-player game.
      *
      * @return true if this node represents a "white" move; false for "black."
      */
-    public boolean white() {
+    public boolean black() {
         return state.player() == state.game().opener();
     }
 
@@ -55,24 +55,22 @@ public class TicTacToeNode implements Node<TicTacToe> {
     public void addChild(State<TicTacToe> state) {
         children.add(new TicTacToeNode((TicTacToeState) state));
     }
-    public int unvisited(){
-        for(int i = 0; i <children.size();i++ ){
-            if(children.get(i).vis()==0)return i;
+    public TicTacToeNode unvisited(){
+        for (Node<TicTacToe> child : children) {
+            if (child.vis() == 0) return (TicTacToeNode) child;
         }
-        return -1;
+        return null;
     }
     public TicTacToeNode getChild(int i){
         return (TicTacToeNode) children.get(i);
     }
     /**
-     * This method sets the number of wins and playouts according to the children states.
+     * This method update the number of wins and playouts according to the children states.
      */
-    public void backPropagate(int childModify) {
+    public void setUpdateValue(int updateValue) {
         vis ++;
-        modify = -childModify;
-        val += modify;
+        val += updateValue;
     }
-
     /**
      * @return the score for this Node and its descendents a win is worth 2 points, a draw is worth 1 point.
      */
@@ -87,48 +85,47 @@ public class TicTacToeNode implements Node<TicTacToe> {
         return vis;
     }
 
-
-    @Override
-    public int modify() {
-        return modify;
-    }
-
     public TicTacToeNode(TicTacToeState state) {
         this.state = state;
-        if(isLeaf()){
-            this.isleaf = true;
-        }
         children = new ArrayList<>();
         initializeNodeData();
     }
+
     public boolean fullyExpanded(){
         return children.size()<vis;
     }
     public TicTacToeNode childWithHighestUCT(){
         TicTacToeNode ret=null;
+
         double highestUCT = Double.NEGATIVE_INFINITY;
         for(Node<TicTacToe> child : children){
-            double uct = (double)child.val() / child.vis() + c * Math.sqrt(Math.log(vis)/child.vis());
+            double uct = (double)child.val() / child.vis() + C * Math.sqrt(Math.log(vis)/child.vis());
             if(uct>highestUCT){
                 highestUCT = uct;
                 ret = (TicTacToeNode)child;
             }
         }
-        return ret;
+        if(ret!=null) return ret;
+        System.out.println("children:");
+        for(Node<TicTacToe> child : children){
+            System.out.println("Child vis:"+child.vis()+"Child val:"+child.val());
+            System.out.println(child.state());
+        }
+        return null;
     }
 
     private void initializeNodeData() {
-        vis = val = modify = 0;
-
+        vis = val = 0;
+    }
+    public void initializeRoot(){
+        vis = 1;
     }
     private final TicTacToeState state;
     private final ArrayList<Node<TicTacToe>> children;
-    boolean isleaf;
     private int val;
     private int vis;
-    private final double c = 1.42;
+    private final double C = 1.42;
     /*
     @param modify return the modification value of current node (win +1 lose -1 even 0) for backpropagation using
    */
-    private int modify;
 }

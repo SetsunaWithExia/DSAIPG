@@ -7,4 +7,9 @@ public class Connect4Move implements Move<Connect4> {
     public int player() {
         return 0;
     }
+
+    @Override
+    public int[] getCoordinates() {
+        return new int[0];
+    }
 }
