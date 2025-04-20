@@ -70,15 +70,15 @@ public class TicTacToe implements Game<TicTacToe> {
         TicTacToeState state = start();
         Scanner scanner = new Scanner(System.in);
         while (!state.isTerminal()) {
-            if(state.player() == opener()){             //if player is opener (machine) then use MCTS move
+            if(state.player() == opener()){         //if player is opener (machine) then use MCTS move
                 System.out.println("Machine Round");
                 //System.out.println("MCTS Searching...");
                 MCTS mcts = new MCTS(new TicTacToeNode(state),1000);
 
                // System.out.println("MCTS Moving...");
                 TicTacToeMove move = mcts.getBestMove();
-                int[] cordinate = move.getCoordinates();
-                System.out.printf("MCTS choose row: %d , column %d\n",cordinate[0],cordinate[1]);
+                int[] cordinates = move.getCoordinates();
+                System.out.printf("MCTS choose row: %d , column %d\n",cordinates[0],cordinates[1]);
                 state = state.next(move);
                 System.out.println(state);
             }else{                              //player is human, waiting for human input
