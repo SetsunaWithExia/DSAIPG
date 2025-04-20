@@ -5,11 +5,30 @@ import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 public class Connect4Move implements Move<Connect4> {
     @Override
     public int player() {
-        return 0;
+        return player;
     }
 
-    @Override
-    public int[] getCoordinates() {
-        return new int[0];
+    /**
+     * Primary constructor.
+     *
+     * @param player the player.
+     * @param col      the column.
+     */
+    public Connect4Move(int player, int col) {
+        this.player = player;
+        this.col = col;
     }
+
+    /**
+     * @return this move as an array of two coordinates: row and column.
+     */
+    public int move() {
+        return col;
+    }
+    public int[] getCoordinates() {
+        return new int[]{col, 0};
+    }
+    private final int player;
+    private final int col;
+
 }

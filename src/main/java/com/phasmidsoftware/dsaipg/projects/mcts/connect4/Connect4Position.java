@@ -9,6 +9,22 @@ import java.util.Optional;
  * Class to represent a Connect 4 board position.
  */
 public class Connect4Position {
+    // Board representation, -1 means empty, 0 is player (Yellow), 1 is machine (Red)
+    private final int[][] grid;
+    // The last player who made a move
+    public final int last;
+    // Number of pieces placed
+    public final int count;
+    // Board dimensions
+    private final static int rows = 6;
+    private final static int cols = 7;
+
+    // Constructor
+    Connect4Position(int[][] grid, int count, int last) {
+        this.grid = grid;
+        this.count = count;
+        this.last = last;
+    }
 
     /**
      * Parse a string of X, O, and . to form a Position.
@@ -20,9 +36,9 @@ public class Connect4Position {
     static Connect4Position parsePosition(final String grid, final int last) {
         int[][] matrix = new int[rows][cols];
         int count = 0;
-        String[] rowStrings = grid.split("\\n", rows);
+        String[] rowStrings = grid.split("\\n", rows); // Split by \n rows
         for (int i = 0; i < rows; i++) {
-            String[] cells = rowStrings[i].split(" ", cols);
+            String[] cells = rowStrings[i].split(" ", cols); // Split each row by spaces up to cols count
             for (int j = 0; j < cols; j++) {
                 int cell = parseCell(cells[j].trim());
                 if (cell >= 0) count++;
@@ -31,27 +47,34 @@ public class Connect4Position {
         }
         return new Connect4Position(matrix, count, last);
     }
-
     /**
      * Method to parse a single cell.
      *
-     * @param cell the String for the cell.
+     * @param cells the String for the cell.
      * @return a number between -1 and one inclusive.
      */
-    static int parseCell(String cell) {
-        return switch (cell.toUpperCase()) {
+    static int parseCell(String cells) {
+        return switch (cells.toUpperCase()) {
             case "O", "0" -> 0;
             case "X", "1" -> 1;
             default -> -1;
         };
     }
 
+    public static int Getmove(Connect4Position prePosition, Connect4Position aftPosition) {
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                if(prePosition.grid[row][col]!=aftPosition.grid[row][col]) return col;
+        return -1;
+    }
+
+
     /**
      * Effect a player's move on this Position.
-     * For Connect4, a move is specified only by the column (y).
+     * For Connect4, a move is specified only by the column (col).
      * The piece will "fall" to the lowest empty position in that column.
      *
-     * @param player the player (0: O, 1: X)
+     * @param player the player (0: Yellow, 1: Red)
      * @param col the column to drop the piece in.
      * @return the new Position.
      */
@@ -59,7 +82,6 @@ public class Connect4Position {
         if (full()) throw new RuntimeException("Position is full");
         if (player == last) throw new RuntimeException("consecutive moves by same player: " + player);
         if (col < 0 || col >= cols) throw new RuntimeException("Column out of bounds: " + col);
-
         int[][] matrix = copyGrid();
         // Find the lowest empty position in the specified column
         int row = -1;
@@ -69,12 +91,10 @@ public class Connect4Position {
                 break;
             }
         }
-
         if (row >= 0) {
             matrix[row][col] = player;
             return new Connect4Position(matrix, count + 1, player);
         }
-
         throw new RuntimeException("Column is full: " + col);
     }
 
@@ -87,16 +107,32 @@ public class Connect4Position {
     public List<Integer> moves(int player) {
         if (player == last) throw new RuntimeException("consecutive moves by same player: " + player);
         List<Integer> result = new ArrayList<>();
-
         for (int j = 0; j < cols; j++) {
             // Check if the top cell in column is empty
             if (grid[0][j] < 0) {
                 result.add(j);
             }
         }
-
         return result;
     }
+
+    /**
+     * @return true if this Position is full.
+     */
+    boolean full() {
+        return count == rows * cols;
+    }
+
+    /**
+     * Create a deep copy of the grid
+     */
+    private int[][] copyGrid() {
+        int[][] result = new int[rows][cols];
+        for (int i = 0; i < rows; i++)
+            result[i] = Arrays.copyOf(grid[i], cols);
+        return result;
+    }
+
 
     /**
      * Determine if this Position represents a winner.
@@ -104,12 +140,13 @@ public class Connect4Position {
      * @return an Optional Integer representing the winning player, or empty if no winner.
      */
     public Optional<Integer> winner() {
-        // Check for four in a row
-        if (count >= 7 && fourInARow()) { // Minimum 7 pieces needed for a win
+        if (count >= 7 && fourInARow()) {
             return Optional.of(last);
         }
         return Optional.empty();
     }
+
+
 
     /**
      * Method to determine if there are four in a row (a winning position).
@@ -120,52 +157,51 @@ public class Connect4Position {
         // Check horizontal
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j <= cols - 4; j++) {
-                if (grid[i][j] == last && grid[i][j+1] == last &&
-                        grid[i][j+2] == last && grid[i][j+3] == last) {
+                if (grid[i][j] != -1 &&
+                        grid[i][j] == grid[i][j+1] &&
+                        grid[i][j] == grid[i][j+2] &&
+                        grid[i][j] == grid[i][j+3]) {
                     return true;
                 }
             }
         }
-
         // Check vertical
         for (int i = 0; i <= rows - 4; i++) {
             for (int j = 0; j < cols; j++) {
-                if (grid[i][j] == last && grid[i+1][j] == last &&
-                        grid[i+2][j] == last && grid[i+3][j] == last) {
+                if (grid[i][j] != -1 &&
+                        grid[i][j] == grid[i+1][j] &&
+                        grid[i][j] == grid[i+2][j] &&
+                        grid[i][j] == grid[i+3][j]) {
                     return true;
                 }
             }
         }
-
         // Check diagonal (down-right)
         for (int i = 0; i <= rows - 4; i++) {
             for (int j = 0; j <= cols - 4; j++) {
-                if (grid[i][j] == last && grid[i+1][j+1] == last &&
-                        grid[i+2][j+2] == last && grid[i+3][j+3] == last) {
+                if (grid[i][j] != -1 &&
+                        grid[i][j] == grid[i+1][j+1] &&
+                        grid[i][j] == grid[i+2][j+2] &&
+                        grid[i][j] == grid[i+3][j+3]) {
                     return true;
                 }
             }
         }
-
         // Check diagonal (up-right)
-        for (int i = 3; i < rows; i++) {
-            for (int j = 0; j <= cols - 4; j++) {
-                if (grid[i][j] == last && grid[i-1][j+1] == last &&
-                        grid[i-2][j+2] == last && grid[i-3][j+3] == last) {
+        for (int i = 0; i <= rows - 4; i++) {
+            for (int j = 3; j < cols; j++) {
+                if (grid[i][j] != -1 &&
+                        grid[i][j] == grid[i+1][j-1] &&
+                        grid[i][j] == grid[i+2][j-2] &&
+                        grid[i][j] == grid[i+3][j-3]) {
                     return true;
                 }
             }
         }
-
-        return false;
+        return false; // No four in a row found
     }
 
-    /**
-     * @return true if this Position is full.
-     */
-    boolean full() {
-        return count == rows * cols;
-    }
+
 
     /**
      * Method to render this Position in a pleasing manner.
@@ -193,6 +229,17 @@ public class Connect4Position {
     }
 
     /**
+     * Convert numeric representation to character representation
+     */
+    private char render(int x) {
+        return switch (x) {
+            case 0 -> 'O';  // Machine/Yellow
+            case 1 -> 'X';  // Human/Red
+            default -> '.'; // Empty cell
+        };
+    }
+
+    /**
      * Get the difference between two positions to determine the move made.
      *
      * @param prevPos the previous position
@@ -208,6 +255,23 @@ public class Connect4Position {
             }
         }
         throw new RuntimeException("The positions are identical.");
+    }
+
+    /**
+     * Create a new empty board position as the initial state for a game
+     *
+     * @return a new empty board position
+     */
+    public static Connect4Position emptyPosition() {
+        int[][] emptyGrid = new int[rows][cols];
+        // Initialize all cells to -1 (empty)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                emptyGrid[i][j] = -1;
+            }
+        }
+        // Initial last is -1 meaning no player has moved yet
+        return new Connect4Position(emptyGrid, 0, -1);
     }
 
     @Override
@@ -234,38 +298,4 @@ public class Connect4Position {
     public int hashCode() {
         return Arrays.deepHashCode(grid);
     }
-
-    Connect4Position(int[][] grid, int count, int last) {
-        this.grid = grid;
-        this.count = count;
-        this.last = last;
-    }
-
-    private int[][] copyGrid() {
-        int[][] result = new int[rows][cols];
-        for (int i = 0; i < rows; i++)
-            result[i] = Arrays.copyOf(grid[i], cols);
-        return result;
-    }
-
-    private char render(int x) {
-        return switch (x) {
-            case 0 -> 'O';
-            case 1 -> 'X';
-            default -> '.';
-        };
-    }
-
-    // The grid representation
-    private final int[][] grid;
-
-    // The last player to move
-    final int last;
-
-    // The count of occupied cells
-    private final int count;
-
-    // Connect4 standard dimensions
-    private final static int rows = 6;
-    private final static int cols = 7;
 }

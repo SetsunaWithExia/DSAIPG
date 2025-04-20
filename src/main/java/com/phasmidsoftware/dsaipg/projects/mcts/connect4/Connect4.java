@@ -10,7 +10,10 @@ import java.util.Scanner;
 public class Connect4 implements Game <Connect4>{
     public static void  main(String[] args) {
         State<Connect4> state = new Connect4(1000).runGameMCTS();
-        if (state.winner().isPresent()) System.out.println("Connect4: winner is: " + state.winner().get());
+        if (state.winner().isPresent()){
+            System.out.println("!!!!!!!!!!!! Connect 4 !!!!!!!!!!!!");
+            System.out.println("Connect4 winner is: " + (state.winner().get() == 0 ? "Machine":"Human"));
+        }
         else System.out.println("Connect4: draw");
     }
     public Connect4(Random random) {
@@ -20,48 +23,62 @@ public class Connect4 implements Game <Connect4>{
         this(new Random(seed));
     }
     @Override
-    public State<Connect4> start() {
-        return new Connect4State();
+    public Connect4State start() {
+        return new Connect4State(this,random,Connect4.startingPosition());
     }
-
     @Override
     public int opener() {
-        return 0;
+        return O;
     }
 
 
-    private static Object startingPosition() {
-        return null;
+    /**
+     * Method to yield a starting position.
+     *
+     * @return a Position.
+     */
+    static Connect4Position startingPosition() {
+        return Connect4Position.parsePosition(". . . . . . .\n" +
+                ". . . . . . .\n" +
+                ". . . . . . .\n" +
+                ". . . . . . .\n" +
+                ". . . . . . .\n" +
+                ". . . . . . .\n", blank);
     }
 
     Connect4State runGameMCTS(){
         Connect4State state = (Connect4State) start();
-
-        int player = opener();
         Scanner scanner = new Scanner(System.in);
+        System.out.println("------Game Start------");
+        System.out.println(state+"\n");
+
         while (!state.isTerminal()) {
-            if(player == opener()){             //if player is opener (machine) then use MCTS move
-//                System.out.println("Machine Round");
+            if(state.player() == opener()){             //if player is opener (machine) then use MCTS move
+                System.out.println("------Machine Round------");
 //                System.out.println("MCTS Searching...");
-//                MCTS mcts = new MCTS(state,1000);
-//                System.out.println("MCTS Moving...");
-//                TicTacToeMove move = mcts.getBestMove();
-//                int[] cordinate = move.getCoordinates();
-//                System.out.printf("MCTS choose + %d %d\n",cordinate[0],cordinate[1]);
-//                state = state.next(move);
+                MCTS mcts = new MCTS(new Connect4Node(state),1000);
+ //               System.out.println("MCTS Moving...");
+                Connect4Move move = mcts.getBestMove();
+                int[] coordinates = move.getCoordinates();
+                System.out.printf("MCTS choose column  %d \n",coordinates[0]);
+                state = state.next(move);
+                System.out.println(state+"\n");
             }else{                              //player is human, waiting for human input
-//                System.out.println("Human Round");
-//                System.out.printf(state.toString());
-//                int i,j;
-//                System.out.println("Please enter row");
-//                i = scanner.nextInt();
-//                System.out.println("Please enter column");
-//                j = scanner.nextInt();
-//                TicTacToeMove move = new TicTacToeMove(player,i,j);
-//                state = state.next(move);
+                System.out.println("------Human Round------");
+                int column;
+                System.out.println("Please enter a column number");
+
+                column = scanner.nextInt();
+                Connect4Move move = new Connect4Move(state.player(), column);
+                state = state.next(move);
+                System.out.println(state+"\n");
             }
         }
         return state;
     }
     private final Random random;
+    public static final int X = 1;    // Human
+    public static final int O = 0;   //Machine
+    public static final int blank = -1;
+
 }
