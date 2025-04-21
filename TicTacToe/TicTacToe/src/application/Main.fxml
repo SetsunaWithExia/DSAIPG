@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="application.MainController" styleClass="main-container">
+   <padding>
+      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+   </padding>
+   <children>
+      <Label text="Tic-Tac-Toe" styleClass="game-title">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+         <effect>
+            <DropShadow color="#00000055" offsetX="2.0" offsetY="2.0" />
+         </effect>
+      </Label>
+      <Label fx:id="statusLabel" text="Game Start!" styleClass="status-label">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <GridPane fx:id="boardGrid" alignment="CENTER" hgap="8.0" vgap="8.0" styleClass="game-board">
+         <effect>
+            <DropShadow color="#00000055" offsetX="3.0" offsetY="3.0" />
+         </effect>
+      </GridPane>
+      <Button fx:id="resetButton" text="New Game" styleClass="reset-button" prefWidth="150.0" prefHeight="40.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <effect>
+            <DropShadow color="#00000040" offsetX="2.0" offsetY="2.0" />
+         </effect>
+      </Button>
+   </children>
+</VBox>

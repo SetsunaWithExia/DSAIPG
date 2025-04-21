@@ -1,0 +1,37 @@
+.main-container {
+    -fx-background-color: #f5f0e1;
+}
+.game-title {
+    -fx-text-fill: #563f1f;
+    -fx-font-weight: bold;
+}
+.status-label {
+    -fx-text-fill: #563f1f;
+    -fx-font-weight: bold;
+}
+.game-board {
+    -fx-background-color: #e6dcc6;
+    -fx-padding: 10px;
+}
+.game-cell {
+    -fx-background-color: #faf6eb;
+    -fx-font-weight: bold;
+    -fx-font-size: 28px;
+}
+.game-cell:hover {
+    -fx-background-color: #fff8e7;
+}
+.game-cell-x {
+    -fx-text-fill: #ff8c42;
+}
+.game-cell-o {
+    -fx-text-fill: #2e8b57;
+}
+.reset-button {
+    -fx-background-color: #78a083;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.reset-button:hover {
+    -fx-background-color: #61876e;
+}
