@@ -2,7 +2,7 @@ package com.phasmidsoftware.dsaipg.graphs.gis;
 
 import org.junit.Test;
 
-public class Position_SphericalTest {
+public class TicTacToePosition_SphericalTest {
 
     @Test
     public void getLatitude() {

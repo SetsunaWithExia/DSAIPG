@@ -100,4 +100,5 @@ public interface State<G extends Game> {
         throw new RuntimeException("empty move iterator");
     }
 
+    Position<G> position();
 }

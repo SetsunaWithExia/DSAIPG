@@ -1,13 +1,10 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.tictactoe;
 
-import com.phasmidsoftware.dsaipg.projects.mcts.core.Game;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
+import com.phasmidsoftware.dsaipg.projects.mcts.core.Position;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
-
-import java.time.Clock;
+import com.phasmidsoftware.dsaipg.projects.mcts.tictactoe.TicTacToePosition;
 import java.util.*;
-
-import static com.phasmidsoftware.dsaipg.projects.mcts.tictactoe.TicTacToe.startingPosition;
 
 public class TicTacToeState implements State<TicTacToe> {
 
@@ -29,7 +26,7 @@ public class TicTacToeState implements State<TicTacToe> {
      */
 
     public int player() {
-        return switch (position.last) {
+        return switch (ticTacToePosition.last) {
             case 0 -> X;
             case 1, -1 -> O;
             default -> blank;
@@ -39,8 +36,8 @@ public class TicTacToeState implements State<TicTacToe> {
     /**
      * @return the Position of this State.
      */
-    public Position position() {
-        return this.position;
+    public TicTacToePosition position() {
+        return this.ticTacToePosition;
     }
 
     /**
@@ -49,7 +46,7 @@ public class TicTacToeState implements State<TicTacToe> {
      * @return an optional int if this State is a win/loss/draw.
      */
     public Optional<Integer> winner() {
-        return position.winner();
+        return ticTacToePosition.winner();
     }
 
     /**
@@ -70,8 +67,8 @@ public class TicTacToeState implements State<TicTacToe> {
      * @return all the possible moves from this state.
      */
     public Collection<Move<TicTacToe>> moves(int player) {
-        if (player == position.last) throw new RuntimeException("consecutive moves by same player: " + player);
-        List<int[]> moves = position.moves(player);
+        if (player == ticTacToePosition.last) throw new RuntimeException("consecutive moves by same player: " + player);
+        List<int[]> moves = ticTacToePosition.moves(player);
   //      int step = 0;
  //       System.out.println("Size="+moves.size());
 //        for (int[] move : moves) {
@@ -92,7 +89,7 @@ public class TicTacToeState implements State<TicTacToe> {
     public TicTacToeState next(Move<TicTacToe> move) {
         TicTacToeMove ticTacToeMove = (TicTacToeMove) move;
         int[] ints = ticTacToeMove.move();
-        return new TicTacToeState(game,random,position.move(move.player(), ints[0], ints[1]));
+        return new TicTacToeState(game,random, ticTacToePosition.move(move.player(), ints[0], ints[1]));
     }
 
     /**
@@ -101,7 +98,7 @@ public class TicTacToeState implements State<TicTacToe> {
      * @return true if position is full or if position is a winner.
      */
     public boolean isTerminal() {
-        return position.full() || position.winner().isPresent();
+        return ticTacToePosition.full() || ticTacToePosition.winner().isPresent();
     }
 
     @Override
@@ -109,16 +106,17 @@ public class TicTacToeState implements State<TicTacToe> {
         return position().render();
     }
 
-    public TicTacToeState(Position position) {
-        this.position = position;
+    public TicTacToeState(TicTacToePosition ticTacToePosition) {
+        this.ticTacToePosition = ticTacToePosition;
+        this.game = new TicTacToe();
     }
     public TicTacToeState(){
         this(TicTacToe.startingPosition());
     }
-    public TicTacToeState(TicTacToe game,Random random, Position position) {
+    public TicTacToeState(TicTacToe game,Random random, TicTacToePosition ticTacToePosition) {
         this.game = game;
         this.random=random;
-        this.position = position;
+        this.ticTacToePosition = ticTacToePosition;
     }
 //    public TicTacToeState(TicTacToeState last, Position position) {
 //        this.game = last.game;
@@ -126,7 +124,7 @@ public class TicTacToeState implements State<TicTacToe> {
 //        this.position = position;
 //    }
     private Random random;
-    private final Position position;
+    private final TicTacToePosition ticTacToePosition;
     public static final int X = 1;
     public static final int O = 0;
     public static final int blank = -1;

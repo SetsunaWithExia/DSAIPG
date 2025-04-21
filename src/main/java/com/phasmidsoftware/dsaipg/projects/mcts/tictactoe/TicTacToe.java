@@ -5,10 +5,8 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.tictactoe;
 
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Game;
-import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.*;
 
 /**
@@ -47,8 +45,8 @@ public class TicTacToe implements Game<TicTacToe> {
      *
      * @return a Position.
      */
-    static Position startingPosition() {
-        return Position.parsePosition(". . .\n. . .\n. . .", blank);
+    static TicTacToePosition startingPosition() {
+        return TicTacToePosition.parsePosition(". . .\n. . .\n. . .", blank);
     }
 
     /**
@@ -71,9 +69,10 @@ public class TicTacToe implements Game<TicTacToe> {
         Scanner scanner = new Scanner(System.in);
         while (!state.isTerminal()) {
             if(state.player() == opener()){         //if player is opener (machine) then use MCTS move
+                System.out.println("Game Start");
                 System.out.println("Machine Round");
                 //System.out.println("MCTS Searching...");
-                MCTS mcts = new MCTS(new TicTacToeNode(state),1000);
+                MCTS mcts = new MCTS(new TicTacToeNode(state),362880);//362880
 
                // System.out.println("MCTS Moving...");
                 TicTacToeMove move = mcts.getBestMove();
@@ -103,7 +102,9 @@ public class TicTacToe implements Game<TicTacToe> {
     public int opener() {
         return O;
     }
-
+    public int opener(int player) {
+        return player;
+    }
     /**
      * Get the starting state for this game.
      *

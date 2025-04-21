@@ -8,12 +8,15 @@ import static org.junit.Assert.assertTrue;
 public class TicTacToeNodeTest {
 
     @Test
-    public void winsAndPlayouts() {
-        TicTacToeState state = new TicTacToeState(Position.parsePosition("X . 0\nX O .\nX . 0", TicTacToe.X));
+    public void winsAndPlayouts() {//*
+        TicTacToeState state = new TicTacToeState(TicTacToePosition.parsePosition("X . 0\nX O .\nX . 0", TicTacToe.X));
         TicTacToeNode node = new TicTacToeNode(state);
+        MCTS mcts = new MCTS(node,2);
+        mcts.traverse(node);
+        mcts.traverse(node);
         assertTrue(node.isLeaf());
         assertEquals(2, node.val());
-        assertEquals(1, node.vis());
+        assertEquals(3, node.vis());
     }
 
     @Test
@@ -28,24 +31,5 @@ public class TicTacToeNodeTest {
         TicTacToeState state = new TicTacToeState();
         TicTacToeNode node = new TicTacToeNode(state);
         assertTrue(node.black());
-    }
-
-    @Test
-    public void children() {
-        // no tests yet
-    }
-
-    @Test
-    public void addChild() {
-        // no tests yet
-    }
-
-    @Test
-    public void backPropagate() {
-        // no tests yet
-    }
-    @Test
-    public void isTerminal() {
-
     }
 }
