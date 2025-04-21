@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import com.phasmidsoftware.dsaipg.projects.mcts.core.Position;
 
 /**
  * This class represents the board of the Tic-tac-toe game.
  * It is a 3x3 matrix of 0s, 1s, and -1s for O, X, and . respectively.
  */
-public class Position {
+public class TicTacToePosition implements Position {
 
     /**
      * Parse a string of X, O, and . to form a Position.
@@ -22,7 +23,7 @@ public class Position {
      * @param last the last player.
      * @return a Position.
      */
-    static Position parsePosition(final String grid, final int last) {
+    static TicTacToePosition parsePosition(final String grid, final int last) {
         int[][] matrix = new int[gridSize][gridSize];
         int count = 0;
         String[] rows = grid.split("\\n", gridSize);
@@ -34,7 +35,7 @@ public class Position {
                 matrix[i][j] = cell;
             }
         }
-        return new Position(matrix, count, last);
+        return new TicTacToePosition(matrix, count, last);
     }
 
     /**
@@ -59,14 +60,14 @@ public class Position {
      * @param y      the second dimension value.
      * @return the new Position.
      */
-    public Position move(int player, int x, int y) {
+    public TicTacToePosition move(int player, int x, int y) {
         if (full()) throw new RuntimeException("Position is full");
         if (player == last) throw new RuntimeException("consecutive moves by same player: " + player);
         int[][] matrix = copyGrid();
         if (matrix[x][y] < 0) {
             // TO BE IMPLEMENTED
             matrix[x][y] = player;
-            return new Position(matrix,count+1,player);
+            return new TicTacToePosition(matrix,count+1,player);
             // END SOLUTION
         }
         throw new RuntimeException("Position is occupied: " + x + ", " + y);
@@ -98,7 +99,7 @@ public class Position {
      * @param axis the axis about which to reflect.
      * @return a new Position.
      */
-    public Position reflect(int axis) {
+    public TicTacToePosition reflect(int axis) {
         int[][] matrix = copyGrid();
         switch (axis) {
             case 0:
@@ -110,7 +111,7 @@ public class Position {
             default:
                 throw new RuntimeException("reflect not implemented for " + axis);
         }
-        return new Position(matrix, count, last);
+        return new TicTacToePosition(matrix, count, last);
     }
 
     /**
@@ -119,12 +120,12 @@ public class Position {
      *
      * @return a new Position which is rotated from this.
      */
-    public Position rotate() {
+    public TicTacToePosition rotate() {
         int[][] matrix = new int[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++)
             for (int j = 0; j < gridSize; j++)
                 matrix[i][j] = grid[j][gridSize - i - 1];
-        return new Position(matrix, count, last);
+        return new TicTacToePosition(matrix, count, last);
     }
 
     /**
@@ -250,7 +251,7 @@ public class Position {
         }
         return sb.toString();
     }
-    public static int[] Getmove(Position prevA, Position prevB){
+    public static int[] Getmove(TicTacToePosition prevA, TicTacToePosition prevB){
         for(int i = 0; i < gridSize; i++){
             for(int j = 0; j < gridSize; j++){
                 if(prevA.grid[i][j] != prevB.grid[i][j]){
@@ -276,8 +277,8 @@ public class Position {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Position position)) return false;
-        return Arrays.deepEquals(grid, position.grid);
+        if (!(o instanceof TicTacToePosition ticTacToePosition)) return false;
+        return Arrays.deepEquals(grid, ticTacToePosition.grid);
     }
 
     @Override
@@ -285,7 +286,7 @@ public class Position {
         return Arrays.deepHashCode(grid);
     }
 
-    Position(int[][] grid, int count, int last) {
+    TicTacToePosition(int[][] grid, int count, int last) {
         this.grid = grid;
         this.count = count;
         this.last = last;

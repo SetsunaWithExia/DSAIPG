@@ -1,5 +1,7 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.connect4;
 
+import com.phasmidsoftware.dsaipg.projects.mcts.core.Position;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.Optional;
 /**
  * Class to represent a Connect 4 board position.
  */
-public class Connect4Position {
+public class Connect4Position implements Position {
     // Board representation, -1 means empty, 0 is player (Yellow), 1 is machine (Red)
     private final int[][] grid;
     // The last player who made a move

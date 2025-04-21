@@ -1,8 +1,11 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.connect4;
 
+import com.phasmidsoftware.dsaipg.projects.mcts.core.Game;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 
-public class Connect4Move implements Move<Connect4> {
+public class Connect4Move implements Move{
+
+
     @Override
     public int player() {
         return player;

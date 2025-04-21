@@ -6,6 +6,7 @@ package com.phasmidsoftware.dsaipg.projects.mcts.tictactoe;
 
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Node;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
+import scala.reflect.internal.Trees;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -99,19 +100,17 @@ public class TicTacToeNode implements Node<TicTacToe> {
 
         double highestUCT = Double.NEGATIVE_INFINITY;
         for(Node<TicTacToe> child : children){
-            double uct = (double)child.val() / child.vis() + C * Math.sqrt(Math.log(vis)/child.vis());
+
+            double uct = (double)child.val() / child.vis() +
+                    C * Math.sqrt(Math.log(vis)/child.vis());
+
             if(uct>highestUCT){
                 highestUCT = uct;
                 ret = (TicTacToeNode)child;
             }
         }
-        if(ret!=null) return ret;
-        System.out.println("children:");
-        for(Node<TicTacToe> child : children){
-            System.out.println("Child vis:"+child.vis()+"Child val:"+child.val());
-            System.out.println(child.state());
-        }
-        return null;
+        return ret;
+
     }
 
     private void initializeNodeData() {
@@ -124,7 +123,7 @@ public class TicTacToeNode implements Node<TicTacToe> {
     private final ArrayList<Node<TicTacToe>> children;
     private int val;
     private int vis;
-    private final double C = 1.42;
+
     /*
     @param modify return the modification value of current node (win +1 lose -1 even 0) for backpropagation using
    */

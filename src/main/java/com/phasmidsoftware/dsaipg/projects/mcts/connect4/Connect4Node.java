@@ -6,10 +6,9 @@ package com.phasmidsoftware.dsaipg.projects.mcts.connect4;
 
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Node;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
+
 
 public class Connect4Node implements Node<Connect4> {
 
@@ -124,7 +123,6 @@ public class Connect4Node implements Node<Connect4> {
     private final ArrayList<Node<Connect4>> children;
     private int val;
     private int vis;
-    private final double C = 1.42;
     /*
     @param modify return the modification value of current node (win +1 lose -1 even 0) for backpropagation using
    */

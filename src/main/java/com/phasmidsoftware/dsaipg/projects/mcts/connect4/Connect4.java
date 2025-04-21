@@ -46,7 +46,7 @@ public class Connect4 implements Game <Connect4>{
                 ". . . . . . .\n", blank);
     }
 
-    Connect4State runGameMCTS(){
+    public Connect4State runGameMCTS(){
         Connect4State state = (Connect4State) start();
         Scanner scanner = new Scanner(System.in);
         System.out.println("------Game Start------");

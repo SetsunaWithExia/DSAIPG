@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class PositionTest {
+public class TicTacToePositionTest {
 
     /**
      * This test class verifies the behavior of the `equals` method in the `Position` class.
